@@ -56,5 +56,4 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " not found"));
         user.setIsEnabled(false);
     }
-
 }
