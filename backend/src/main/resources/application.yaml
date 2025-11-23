@@ -24,3 +24,12 @@ spring:
         jdbc:
           batch_size: 25
         order_updates: true
+app:
+  jwt:
+    secret: ${secret_key}
+    expiration: 86400000
+
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    context-path: "/"
