@@ -5,10 +5,9 @@ import com.skyway.error.InvalidTokenException;
 import com.skyway.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
@@ -18,19 +17,19 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JWTResponse> register(@Valid @RequestParam UserCreateDTO userCreateDTO) {
+    public ResponseEntity<JWTResponse> register(@Valid @RequestBody UserCreateDTO userCreateDTO) {
         JWTResponse jwtResponse = authService.register(userCreateDTO);
         return ResponseEntity.ok(jwtResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JWTResponse> login(@Valid @RequestParam UserLoginRequestDTO userLoginRequestDTO) {
+    public ResponseEntity<JWTResponse> login(@Valid @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
         JWTResponse jwtResponse = authService.login(userLoginRequestDTO);
         return ResponseEntity.ok(jwtResponse);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<JWTResponse> refresh(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<JWTResponse> refresh(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new InvalidTokenException("invalid token");
         }
@@ -39,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<MessageResponse> logout(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<MessageResponse> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new InvalidTokenException("invalid token");
         }
