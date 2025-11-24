@@ -43,15 +43,7 @@ public class AuthService {
     }
 
     public JWTResponse register(UserCreateDTO userCreateDTO) {
-        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
-            throw new UserAlreadyExistsError("user with email " + userCreateDTO.getEmail() + " already exists");
-        }
-        User user = userMapper.toUser(userCreateDTO);
-        userRepository.save(user);
-        UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
-        userLoginRequestDTO.setEmail(user.getEmail());
-        userLoginRequestDTO.setPassword(user.getPassword());
-        return login(userLoginRequestDTO);
+        return login(userService.createUser(userCreateDTO));
     }
 
     public JWTResponse login(UserLoginRequestDTO userLoginRequestDTO) {
