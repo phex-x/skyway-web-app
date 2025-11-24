@@ -47,6 +47,9 @@ public class User implements UserDetails {
     @Column(name = "is_enabled")
     private Boolean isEnabled;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Passenger passenger;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -111,6 +114,7 @@ public class User implements UserDetails {
     public Role getRole() {return this.role;}
     public Boolean getIsEnabled() {return this.isEnabled;}
     public String getHashedPassword(String password) {return this.hashedPassword;}
+    public Passenger getPassenger() {return this.passenger;}
 
     //setters
     public void setId(Long id) {this.id = id;}
@@ -125,4 +129,5 @@ public class User implements UserDetails {
     public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
     public void setRole(Role role) {this.role = role;}
     public void setIsEnabled(Boolean isEnabled) {this.isEnabled = isEnabled;}
+    public void setPassenger(Passenger passenger) {this.passenger = passenger;}
 }
