@@ -3,8 +3,8 @@ spring:
     name: skyway
   datasource:
     url: jdbc:postgresql://localhost:5432/${DB_NAME:skyway_db}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 5
@@ -26,10 +26,10 @@ spring:
         order_updates: true
 app:
   jwt:
-    secret: ${secret_key}
+    secret: ${secret_key:YyYOtpwkwSygwnYVuQr1mBxliqw1s8sdyPeWiXyntdU=}
     expiration: 86400000
 
 server:
-  port: ${SERVER_PORT}
+  port: ${SERVER_PORT:8080}
   servlet:
     context-path: "/"
