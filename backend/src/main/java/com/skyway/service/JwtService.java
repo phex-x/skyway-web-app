@@ -5,13 +5,13 @@ import com.skyway.security.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         try {
-            return Jwts.parser()
+            return Jwts.parserBuilder()
                     .setSigningKey(getSignInKey())
                     .build()
                     .parseClaimsJws(token)
@@ -54,7 +54,6 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 
-        // Добавляем authorities (роли) в claims
         if (userDetails.getAuthorities() != null) {
             String authorities = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
@@ -116,8 +115,7 @@ public class JwtService {
 
     private SecretKey getSignInKey() {
         try {
-            byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecret());
-            return Keys.hmacShaKeyFor(keyBytes);
+            return Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException("Invalid JWT secret key", e);
         }
