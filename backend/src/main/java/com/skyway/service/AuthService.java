@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class AuthService {
     private final UserService userService;
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
 
     private final ArrayList<String> tokenBlacklist = new ArrayList<>();
@@ -33,12 +31,11 @@ public class AuthService {
 
     public AuthService(JwtService jwtService, UserService userService,
                        CustomUserDetailsService customUserDetailsService, UserRepository userRepository,
-                       UserMapper userMapper, AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
         this.userService = userService;
         this.customUserDetailsService = customUserDetailsService;
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
         this.authenticationManager = authenticationManager;
     }
 
