@@ -5,15 +5,23 @@ import com.skyway.dto.UserResponseDTO;
 import com.skyway.entity.Role;
 import com.skyway.entity.User;
 import com.skyway.error.PasswordsDontMatchError;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class UserMapper {
+    private final PasswordEncoder passwordEncoder;
+    public UserMapper(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public User toUser(UserCreateDTO userCreateDTO) {
         User user = new User();
         user.setEmail(userCreateDTO.getEmail());
         if (isPasswordMatches(userCreateDTO.getPassword(), userCreateDTO.getPasswordConfirmation())) {
-            user.setHashedPassword(userCreateDTO.getPassword());
+            user.setHashedPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         } else {throw new PasswordsDontMatchError("passwords don't match");}
         user.setFirstName(userCreateDTO.getFirstName());
         user.setLastName(userCreateDTO.getLastName());
@@ -23,6 +31,8 @@ public class UserMapper {
         user.setRole(Role.USER);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
+        user.setIsEnabled(true);
+        System.out.println(user);
         return user;
     }
 
