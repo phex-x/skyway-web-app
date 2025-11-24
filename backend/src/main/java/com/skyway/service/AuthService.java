@@ -22,7 +22,6 @@ import java.util.ArrayList;
 @Service
 public class AuthService {
     private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final CustomUserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
@@ -32,11 +31,10 @@ public class AuthService {
     private final ArrayList<String> tokenBlacklist = new ArrayList<>();
 
 
-    public AuthService(JwtService jwtService, PasswordEncoder passwordEncoder, UserService userService,
+    public AuthService(JwtService jwtService, UserService userService,
                        CustomUserDetailsService customUserDetailsService, UserRepository userRepository,
                        UserMapper userMapper, AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
-        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.customUserDetailsService = customUserDetailsService;
         this.userRepository = userRepository;
@@ -64,21 +62,18 @@ public class AuthService {
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-            CustomUserDetailsService userDetailsService = (CustomUserDetailsService) auth.getPrincipal();
+            User userDetails = (User) auth.getPrincipal();
 
-            User user = userRepository.findByEmail(userLoginRequestDTO.getEmail())
-                    .orElseThrow(() -> new UserNotFoundError("user with email " + userLoginRequestDTO.getEmail() + " not found"));
-
-            String token = jwtService.generateToken(user);
+            String token = jwtService.generateToken(userDetails);
 
             return new JWTResponse(
                     token,
-                    token,
-                    user.getId(),
-                    user.getEmail(),
-                    user.getRole(),
-                    user.getFirstName(),
-                    user.getLastName()
+                    "bearer",
+                    userDetails.getId(),
+                    userDetails.getEmail(),
+                    userDetails.getRole(),
+                    userDetails.getFirstName(),
+                    userDetails.getLastName()
             );
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Invalid username or password");
@@ -111,7 +106,7 @@ public class AuthService {
 
         return new JWTResponse(
                 newToken,
-                newToken,
+                "bearer",
                 user.getId(),
                 user.getEmail(),
                 user.getRole(),
@@ -127,7 +122,7 @@ public class AuthService {
 
     public UserResponseDTO getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null || !auth.isAuthenticated()) {
+        if (auth == null || !auth.isAuthenticated()) {
             throw new InvalidCredentialException("user not authenticated");
         }
 
