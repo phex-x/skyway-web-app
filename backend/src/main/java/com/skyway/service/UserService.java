@@ -1,6 +1,7 @@
 package com.skyway.service;
 
 import com.skyway.dto.UserCreateDTO;
+import com.skyway.dto.UserLoginRequestDTO;
 import com.skyway.dto.UserResponseDTO;
 import com.skyway.entity.User;
 import com.skyway.error.UserAlreadyExistsError;
@@ -15,15 +16,19 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private UserMapper userMapper;
 
-    public UserResponseDTO createUser(UserCreateDTO userCreateDTO) {
+    public UserLoginRequestDTO createUser(UserCreateDTO userCreateDTO) {
         if (userRepository.findByEmail(userCreateDTO.getEmail()).isPresent()) {
             throw new UserAlreadyExistsError("user with email " + userCreateDTO.getEmail() + " already exists");
         }
         User user = userMapper.toUser(userCreateDTO);
         user = userRepository.save(user);
-        return userMapper.toUserResponseDTO(user);
+        UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
+        userLoginRequestDTO.setEmail(user.getEmail());
+        userLoginRequestDTO.setPassword(user.getPassword());
+        return userLoginRequestDTO;
     }
 
     public UserResponseDTO getUserByEmail(String email) {
@@ -56,5 +61,4 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " not found"));
         user.setIsEnabled(false);
     }
-
 }
