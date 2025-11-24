@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers("/").hasRole("ADMIN")
                         .requestMatchers("/").authenticated()
