@@ -2,9 +2,7 @@ package com.skyway.controller;
 
 import com.skyway.dto.PassengerCreateRequestDTO;
 import com.skyway.dto.PassengerResponseDTO;
-import com.skyway.entity.Passenger;
 import com.skyway.entity.User;
-import com.skyway.mapper.PassengerMapper;
 import com.skyway.service.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,15 +20,11 @@ public class UserController {
     @Autowired
     private PassengerService passengerService;
 
-    @Autowired
-    private PassengerMapper passengerMapper;
-
-
     @PostMapping("/passenger/add")
     public ResponseEntity<?> createNewPassenger(PassengerCreateRequestDTO passengerCreateDTO) {
-        Passenger passenger = passengerMapper.toPassenger(passengerCreateDTO);
+        PassengerResponseDTO passenger = passengerService.createPassenger(passengerCreateDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(passengerMapper.toPassengerResponseDTO(passenger));
+        return ResponseEntity.status(HttpStatus.CREATED).body(passenger);
     }
 
     @DeleteMapping("/passenger/delete/{id}")
