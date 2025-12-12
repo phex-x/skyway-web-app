@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class PassengerMapper {
     public Passenger toPassenger(PassengerCreateRequestDTO passengerCreateRequestDTO) {
         Passenger passenger = new Passenger();
+        passenger.setFirstName(passengerCreateRequestDTO.getFirstName());
+        passenger.setLastName(passengerCreateRequestDTO.getLastName());
         passenger.setUser(passengerCreateRequestDTO.getUser());
         passenger.setPassportNumber(passengerCreateRequestDTO.getPassportNumber());
         passenger.setCitizenship(passengerCreateRequestDTO.getCitizenship());
@@ -25,6 +27,8 @@ public class PassengerMapper {
     public PassengerResponseDTO toPassengerResponseDTO(Passenger passenger) {
         PassengerResponseDTO passengerResponseDTO = new PassengerResponseDTO();
         passengerResponseDTO.setId(passenger.getId());
+        passengerResponseDTO.setFirstName(passenger.getFirstName());
+        passengerResponseDTO.setLastName(passenger.getLastName());
         passengerResponseDTO.setUser(passenger.getUser());
         passengerResponseDTO.setPassportNumber(passenger.getPassportNumber());
         passengerResponseDTO.setCitizenship(passenger.getCitizenship());
