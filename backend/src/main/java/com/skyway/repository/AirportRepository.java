@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AirportRepository extends JpaRepository<Airport, Long> {
+    public boolean existsByIcaoCode(String icao);
+    public Airport findByIcaoCode(String icao);
 }
