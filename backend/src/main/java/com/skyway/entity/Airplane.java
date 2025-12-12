@@ -14,7 +14,7 @@ public class Airplane {
     @Column(name = "model")
     private String model;
 
-    @Column(name = "registration_number")
+    @Column(name = "registration_number", unique = true)
     private String registrationNumber;
 
     @Column(name = "economy_seats_amount")

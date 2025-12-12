@@ -11,10 +11,10 @@ public class Airport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "iata_code")
+    @Column(name = "iata_code", unique = true, nullable = false)
     private String iataCode;
 
-    @Column(name = "icao_code")
+    @Column(name = "icao_code", unique = true, nullable = false)
     private String icaoCode;
 
     @Column(name = "name")
