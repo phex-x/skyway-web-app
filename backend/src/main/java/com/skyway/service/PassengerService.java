@@ -7,17 +7,19 @@ import com.skyway.error.PassengerAlreadyExistsException;
 import com.skyway.error.PassengerNotFoundException;
 import com.skyway.mapper.PassengerMapper;
 import com.skyway.repository.PassengerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PassengerService {
-    private final PassengerRepository passengerRepository;
-    private final PassengerMapper passengerMapper;
+    @Autowired
+    private PassengerRepository passengerRepository;
 
-    public PassengerService(PassengerRepository passengerRepository, PassengerMapper passengerMapper) {
-        this.passengerRepository = passengerRepository;
-        this.passengerMapper = passengerMapper;
-    }
+    @Autowired
+    private PassengerMapper passengerMapper;
 
     public PassengerResponseDTO createPassenger(PassengerCreateRequestDTO passengerCreateRequestDTO) {
         if (passengerRepository.findByUser(passengerCreateRequestDTO.getUser()).isPresent()) {
@@ -31,6 +33,16 @@ public class PassengerService {
         Passenger passenger = passengerRepository.findById(passengerId)
                 .orElseThrow(() -> new PassengerNotFoundException("Passenger not found Exception"));
         return passengerMapper.toPassengerResponseDTO(passenger);
+    }
+
+    public List<PassengerResponseDTO> getAllPassengers() {
+        List<Passenger> passengers = passengerRepository.findAll();
+        List<PassengerResponseDTO> passengerResponseDTOS = new ArrayList<>();
+
+        for (Passenger passenger : passengers) {
+            passengerResponseDTOS.add(passengerMapper.toPassengerResponseDTO(passenger));
+        }
+        return passengerResponseDTOS;
     }
 
     public void deletePassengerById(Long passengerId) {
