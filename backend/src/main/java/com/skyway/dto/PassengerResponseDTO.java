@@ -9,6 +9,8 @@ import java.util.Date;
 
 public class PassengerResponseDTO {
     private Long id;
+    private String firstName;
+    private String lastName;
     private User user;
     private String passportNumber;
     private String citizenship;
@@ -19,6 +21,8 @@ public class PassengerResponseDTO {
 
     //getters
     public Long getId() {return this.id;}
+    public String getFirstName() {return this.firstName;}
+    public String getLastName() {return this.lastName;}
     public User getUser() {return this.user;}
     public String getPassportNumber() {return this.passportNumber;}
     public String getCitizenship() {return this.citizenship;}
@@ -29,6 +33,8 @@ public class PassengerResponseDTO {
 
     //setters
     public void setId(Long id) {this.id = id;}
+    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public void setLastName(String lastName) {this.lastName = lastName;}
     public void setUser(User user) {this.user = user;}
     public void setPassportNumber(String passportNumber) {this.passportNumber = passportNumber;}
     public void setCitizenship(String citizenship) {this.citizenship = citizenship;}
