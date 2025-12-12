@@ -29,8 +29,8 @@ public class PassengerService {
         return passengerMapper.toPassengerResponseDTO(passengerRepository.save(passenger));
     }
 
-    public PassengerResponseDTO getPassengerByPassengerId(Long passengerId) {
-        Passenger passenger = passengerRepository.findById(passengerId)
+    public PassengerResponseDTO getPassengerById(Long id) {
+        Passenger passenger = passengerRepository.findById(id)
                 .orElseThrow(() -> new PassengerNotFoundException("Passenger not found Exception"));
         return passengerMapper.toPassengerResponseDTO(passenger);
     }
