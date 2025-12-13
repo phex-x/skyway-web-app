@@ -1,13 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const FlightSearchTab = () => {
+  const navigate = useNavigate();
   const [departure, setDeparture] = useState('');
   const [arrival, setArrival] = useState('');
+  const [tripType, setTripType] = useState('one-way');
+  const [departureDate, setDepartureDate] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [seatClass, setSeatClass] = useState('ECONOMY');
+  const [passengerCount, setPassengerCount] = useState(1);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement flight search
-    console.log('Search flights:', { departure, arrival });
+    if (!departure || !arrival || !departureDate) {
+      alert('Заполните все обязательные поля');
+      return;
+    }
+    if (tripType === 'round-trip' && !returnDate) {
+      alert('Укажите дату возврата');
+      return;
+    }
+    
+    navigate('/flights', {
+      state: {
+        departure,
+        arrival,
+        tripType,
+        departureDate,
+        returnDate: tripType === 'round-trip' ? returnDate : null,
+        seatClass,
+        passengerCount
+      }
+    });
   };
 
   const styles = {
@@ -52,6 +77,32 @@ const FlightSearchTab = () => {
 
   return (
     <form onSubmit={handleSubmit} style={styles.formContainer}>
+      <div style={{ ...styles.inputGroup, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="tripType"
+              value="one-way"
+              checked={tripType === 'one-way'}
+              onChange={(e) => setTripType(e.target.value)}
+              style={{ marginRight: '5px' }}
+            />
+            В одну сторону
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="tripType"
+              value="round-trip"
+              checked={tripType === 'round-trip'}
+              onChange={(e) => setTripType(e.target.value)}
+              style={{ marginRight: '5px' }}
+            />
+            Туда-обратно
+          </label>
+        </div>
+      </div>
       <div style={styles.inputGroup}>
         <label style={styles.label}>Аэропорт вылета</label>
         <input
@@ -60,6 +111,7 @@ const FlightSearchTab = () => {
           onChange={(e) => setDeparture(e.target.value)}
           placeholder="Аэропорт вылета"
           style={styles.input}
+          required
         />
       </div>
       <div style={styles.inputGroup}>
@@ -70,6 +122,52 @@ const FlightSearchTab = () => {
           onChange={(e) => setArrival(e.target.value)}
           placeholder="Аэропорт прибытия"
           style={styles.input}
+          required
+        />
+      </div>
+      <div style={styles.inputGroup}>
+        <label style={styles.label}>Дата вылета</label>
+        <input
+          type="date"
+          value={departureDate}
+          onChange={(e) => setDepartureDate(e.target.value)}
+          style={styles.input}
+          required
+        />
+      </div>
+      {tripType === 'round-trip' && (
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Дата возврата</label>
+          <input
+            type="date"
+            value={returnDate}
+            onChange={(e) => setReturnDate(e.target.value)}
+            style={styles.input}
+            required
+          />
+        </div>
+      )}
+      <div style={styles.inputGroup}>
+        <label style={styles.label}>Класс места</label>
+        <select
+          value={seatClass}
+          onChange={(e) => setSeatClass(e.target.value)}
+          style={styles.input}
+        >
+          <option value="ECONOMY">Эконом</option>
+          <option value="BUSINESS">Бизнес</option>
+        </select>
+      </div>
+      <div style={styles.inputGroup}>
+        <label style={styles.label}>Количество пассажиров</label>
+        <input
+          type="number"
+          min="1"
+          max="9"
+          value={passengerCount}
+          onChange={(e) => setPassengerCount(parseInt(e.target.value) || 1)}
+          style={styles.input}
+          required
         />
       </div>
       <button type="submit" style={styles.searchButton}>

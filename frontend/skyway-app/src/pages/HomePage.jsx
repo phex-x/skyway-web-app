@@ -6,6 +6,7 @@ import ManageBookingTab from '../components/ManageBookingTab';
 import FlightStatusTab from '../components/FlightStatusTab';
 import tagIcon from '../assets/images/бирка.png';
 import clockIcon from '../assets/images/часы.png';
+import airplaneIcon from '../assets/images/самолет.png'
 
 const HomePage = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -188,8 +189,26 @@ const HomePage = () => {
             </div>
           </div>
           <nav style={styles.nav}>
-            <a href="#" style={styles.navLink}>БРОНИРОВАНИЕ</a>
-            <a href="#" style={styles.navLink}>УПРАВЛЕНИЕ</a>
+            <a 
+              href="#" 
+              style={styles.navLink}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/booking-search');
+              }}
+            >
+              БРОНИРОВАНИЕ
+            </a>
+            <a 
+              href="#" 
+              style={styles.navLink}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/manage-booking');
+              }}
+            >
+              УПРАВЛЕНИЕ
+            </a>
             <a href="#" style={styles.navLink}>НАПРАВЛЕНИЯ</a>
             <a href="#" style={styles.navLink}>ОБ АВТОРЕ</a>
           </nav>
@@ -198,11 +217,18 @@ const HomePage = () => {
           {isAuthenticated && user ? (
             <>
               <span style={styles.userName}>{user.firstName} {user.lastName}</span>
-            <button onClick={handleLogout} style={styles.loginButton}>
-              <img src="/images/profile-icon.png" alt="Profile" style={{ width: '20px', height: '20px' }} />
-              <span>Выход</span>
-            </button>
-          </>
+              <button 
+                onClick={() => navigate('/profile')} 
+                style={styles.loginButton}
+                title="Профиль"
+              >
+                <img src="/images/profile-icon.png" alt="Profile" style={{ width: '20px', height: '20px' }} />
+                <span>Профиль</span>
+              </button>
+              <button onClick={handleLogout} style={styles.loginButton}>
+                <span>Выход</span>
+              </button>
+            </>
           ) : (
             <button onClick={() => navigate('/login')} style={styles.loginButton}>
               <img src="/images/profile-icon.png" alt="Login" style={{ width: '20px', height: '20px' }} />
@@ -222,7 +248,7 @@ const HomePage = () => {
               }}
               onClick={() => setActiveTab('search')}
             >
-              <img src="/images/самолет.png" alt="Search" style={styles.tabIcon} />
+              <img src={airplaneIcon} alt="Search" style={styles.tabIcon} />
               <span>Поиск рейсов</span>
             </button>
             <button

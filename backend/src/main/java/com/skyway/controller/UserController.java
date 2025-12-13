@@ -22,7 +22,11 @@ public class UserController {
 
     @PostMapping("/passenger/add")
     public ResponseEntity<?> createNewPassenger(PassengerCreateRequestDTO passengerCreateDTO) {
-        PassengerResponseDTO passenger = passengerService.createPassenger(passengerCreateDTO);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        assert auth != null;
+        User user = (User) auth.getPrincipal();
+        assert user != null;
+        PassengerResponseDTO passenger = passengerService.createPassenger(passengerCreateDTO, user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(passenger);
     }

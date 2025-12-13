@@ -3,6 +3,7 @@ package com.skyway.mapper;
 import com.skyway.dto.PassengerCreateRequestDTO;
 import com.skyway.dto.PassengerResponseDTO;
 import com.skyway.entity.Passenger;
+import com.skyway.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -10,11 +11,11 @@ import java.time.LocalDateTime;
 
 @Component
 public class PassengerMapper {
-    public Passenger toPassenger(PassengerCreateRequestDTO passengerCreateRequestDTO) {
+    public Passenger toPassenger(PassengerCreateRequestDTO passengerCreateRequestDTO, User user) {
         Passenger passenger = new Passenger();
         passenger.setFirstName(passengerCreateRequestDTO.getFirstName());
         passenger.setLastName(passengerCreateRequestDTO.getLastName());
-        passenger.setUser(passengerCreateRequestDTO.getUser());
+        passenger.setUser(user);
         passenger.setPassportNumber(passengerCreateRequestDTO.getPassportNumber());
         passenger.setCitizenship(passengerCreateRequestDTO.getCitizenship());
         passenger.setDateOfBirth(passengerCreateRequestDTO.getBirthday());

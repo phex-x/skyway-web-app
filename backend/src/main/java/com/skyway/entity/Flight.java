@@ -38,6 +38,18 @@ public class Flight {
     @Column(name = "business_seat_price")
     private double businessSeatPrice;
 
+    @Column(name = "remaining_economy_seats")
+    private int remainingEconomySeats;
+
+    @Column(name = "booked_economy_seats")
+    private int bookedEconomySeats;
+
+    @Column(name = "remaining_business_seats")
+    private int remainingBusinessSeats;
+
+    @Column(name = "booked_business_seats")
+    private int bookedBusinessSeats;
+
     //getters
     public Long getId() {return this.id; }
     public String getFlightNumber() {return this.flightNumber;}
@@ -48,6 +60,10 @@ public class Flight {
     public LocalDateTime getScheduledArrival() {return this.scheduledArrival;}
     public double getEconomySeatPrice() {return this.economySeatPrice;}
     public double getBusinessSeatPrice() {return this.businessSeatPrice;}
+    public int getRemainingEconomySeats() {return this.remainingEconomySeats;}
+    public int getBookedEconomySeats() {return this.bookedEconomySeats;}
+    public int getRemainingBusinessSeats() {return this.remainingBusinessSeats;}
+    public int getBookedBusinessSeats() {return this.bookedBusinessSeats;}
 
     //setters
     public void setId(Long id) {this.id = id;}
@@ -64,5 +80,17 @@ public class Flight {
     public void setEconomySeatPrice(double economySeatPrice) {this.economySeatPrice = economySeatPrice;}
     public void setBusinessSeatPrice(double businessSeatPrice) {
         this.businessSeatPrice = businessSeatPrice;
+    }
+    public void setRemainingEconomySeats(int remainingEconomySeats) {
+        this.remainingEconomySeats = remainingEconomySeats;
+    }
+    public void setBookedEconomySeats(int bookedEconomySeats) {
+        this.bookedEconomySeats = bookedEconomySeats;
+    }
+    public void setRemainingBusinessSeats(int remainingBusinessSeats) {
+        this.remainingBusinessSeats = remainingBusinessSeats;
+    }
+    public void setBookedBusinessSeats(int bookedBusinessSeats) {
+        this.bookedBusinessSeats = bookedBusinessSeats;
     }
 }

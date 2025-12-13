@@ -29,14 +29,13 @@ public class Booking {
     @Column(name = "booking_date")
     private LocalDate bookingDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "seat_class")
     private SeatClass seatClass;
-
-    @Column(name = "number_of_passengers")
-    private int numberOfPassengers;
 
     //getters
     public Long getId() {return this.id; }
@@ -47,7 +46,6 @@ public class Booking {
     public LocalDate getBookingDate() {return this.bookingDate; }
     public Status getStatus() {return this.status; }
     public SeatClass getSeatClass() {return this.seatClass; }
-    public int getNumberOfPassengers() {return this.numberOfPassengers; }
 
     //setters
     public void setId(Long id) { this.id = id; }
@@ -60,7 +58,4 @@ public class Booking {
     public void setBookingDate(LocalDate bookingDate) { this.bookingDate = bookingDate; }
     public void setStatus(Status status) { this.status = status; }
     public void setSeatClass(SeatClass seatClass) { this.seatClass = seatClass; }
-    public void setNumberOfPassengers(int numberOfPassengers) {
-        this.numberOfPassengers = numberOfPassengers;
-    }
 }
