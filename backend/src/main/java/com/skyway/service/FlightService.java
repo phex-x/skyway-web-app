@@ -1,11 +1,8 @@
 package com.skyway.service;
 
-import com.skyway.dto.OneWayFLightResponse;
-import com.skyway.dto.OneWayFlightRequest;
-import com.skyway.dto.RoundTripFlightRequest;
-import com.skyway.dto.RoundTripFlightResponse;
+import com.skyway.dto.*;
 import com.skyway.entity.Flight;
-import com.skyway.mapper.FlightsMapper;
+import com.skyway.mapper.FlightMapper;
 import com.skyway.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,20 +16,25 @@ public class FlightService {
     private FlightRepository flightRepository;
 
     @Autowired
-    private FlightsMapper flightsMapper;
+    private FlightMapper flightsMapper;
 
-    public void createFlight(Flight flight) {
+    public FlightResponse createFlight(FlightCreate flight) {
         if (flightRepository.existsByFlightNumber(flight.getFlightNumber())) {
             throw new RuntimeException("Flight number already exists");
         }
-        flightRepository.save(flight);
+        return flightsMapper.toFlightResponse(flightRepository.save(flightsMapper.toFlight(flight)));
     }
 
-    public Flight getFlight(Long id) {
+    public FlightResponse getFlight(Long id) {
         Flight flight = flightRepository.findById(id)
-
                 .orElseThrow(() -> new RuntimeException("Flight not found"));
-        return flight;
+        return flightsMapper.toFlightResponse(flight);
+    }
+
+    public List<FlightResponse> getAllFlights() {
+        return flightRepository.findAll().stream()
+                .map(flight -> flightsMapper.toFlightResponse(flight))
+                .collect(Collectors.toList());
     }
 
     public void deleteFlight(Long id) {
@@ -48,7 +50,7 @@ public class FlightService {
                 oneWayFlightRequest.getArrivalAirportName(),
                 oneWayFlightRequest.getDepartureDate(),
                 oneWayFlightRequest.getPassengerCount(),
-                oneWayFlightRequest.getSeatClass()
+                oneWayFlightRequest.getSeatClass().name()
         );
 
         return flights.stream()
@@ -62,7 +64,7 @@ public class FlightService {
                 roundTripFlightRequest.getArrivalAirportName(),
                 roundTripFlightRequest.getDepartureDate(),
                 roundTripFlightRequest.getPassengerCount(),
-                roundTripFlightRequest.getSeatClass()
+                roundTripFlightRequest.getSeatClass().name()
         );
 
         List<Flight> flightsFrom = flightRepository.flightSearch(
@@ -70,7 +72,7 @@ public class FlightService {
                 roundTripFlightRequest.getDepartureAirportName(),
                 roundTripFlightRequest.getArrivalDate(),
                 roundTripFlightRequest.getPassengerCount(),
-                roundTripFlightRequest.getSeatClass()
+                roundTripFlightRequest.getSeatClass().name()
         );
 
         return flightsMapper.toRoundTripFlightResponse(flightsTo, flightsFrom, roundTripFlightRequest.getSeatClass());
