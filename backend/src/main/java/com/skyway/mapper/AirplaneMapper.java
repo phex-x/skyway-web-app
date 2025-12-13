@@ -24,7 +24,6 @@ public class AirplaneMapper {
         airplaneResponse.setRegistrationNumber(airplane.getRegistrationNumber());
         airplaneResponse.setBusinessSeatsAmount(airplane.getBusinessSeatsAmount());
         airplaneResponse.setEconomySeatsAmount(airplane.getEconomySeatsAmount());
-        airplaneResponse.setFlights(airplane.getFlights());
 
         return airplaneResponse;
     }
