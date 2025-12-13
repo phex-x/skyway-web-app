@@ -1,6 +1,7 @@
 package com.skyway.service;
 
 import com.skyway.dto.AirplaneCreate;
+import com.skyway.dto.AirplaneResponse;
 import com.skyway.entity.Airplane;
 import com.skyway.error.AirplaneAlreadyExistsException;
 import com.skyway.error.AirplaneNotFoundException;
@@ -9,7 +10,9 @@ import com.skyway.repository.AirplaneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AirplaneService {
@@ -26,9 +29,9 @@ public class AirplaneService {
                 airplaneCreate.getRegistrationNumber() + " already exists");
     }
 
-    public Airplane getAirplaneById(Long id){
-        return airplaneRepository.findById(id)
-                .orElseThrow(() -> new AirplaneNotFoundException("airplane with id: " + id + " doesn't exists"));
+    public AirplaneResponse getAirplaneById(Long id){
+        return airplaneMapper.toDto(airplaneRepository.findById(id)
+                .orElseThrow(() -> new AirplaneNotFoundException("airplane with id: " + id + " doesn't exists")));
     }
 
     public void deleteAirplane(Long id){
@@ -42,7 +45,10 @@ public class AirplaneService {
         return airplaneRepository.existsByRegistrationNumber(code);
     }
 
-    public List<Airplane> getAllAirplanes(){
-        return airplaneRepository.findAll();
+    public List<AirplaneResponse> getAllAirplanes(){
+        List<Airplane> airplanes = airplaneRepository.findAll();
+        return airplanes.stream()
+                .map(flight -> airplaneMapper.toDto(flight))
+                .collect(Collectors.toList());
     }
 }

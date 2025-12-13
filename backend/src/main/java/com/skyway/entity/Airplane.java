@@ -32,6 +32,7 @@ public class Airplane {
     public String getRegistrationNumber() {return this.registrationNumber;}
     public int getEconomySeatsAmount() { return this.economySeatsAmount; }
     public int getBusinessSeatsAmount() { return this.businessSeatsAmount; }
+    public List<Flight> getFlights() {return this.flights;}
 
     //setters
     public void setId(Long id) { this.id = id; }
