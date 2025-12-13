@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Загружаем данные пользователя при монтировании
     const savedUser = authService.getUser();
     if (savedUser) {
       setUser(savedUser);
