@@ -61,7 +61,14 @@ const Login = () => {
       });
 
       if (result.success) {
-        navigate('/');
+        const userData = JSON.parse(localStorage.getItem('user') || '{}');
+        if (userData.role === 'ADMIN') {
+          navigate('/admin-panel');
+        } else if (userData.role === 'STAFF') {
+          navigate('/staff-panel');
+        } else {
+          navigate('/');
+        }
       } else {
         setErrors({ 
           general: result.message || 'Login failed. Please check your credentials.' 

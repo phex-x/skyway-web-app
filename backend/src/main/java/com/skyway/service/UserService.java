@@ -4,15 +4,18 @@ import com.skyway.dto.UserCreateDTO;
 import com.skyway.dto.UserLoginRequestDTO;
 import com.skyway.dto.UserResponseDTO;
 import com.skyway.entity.Passenger;
+import com.skyway.entity.Role;
 import com.skyway.entity.User;
 import com.skyway.error.UserAlreadyExistsError;
 import com.skyway.error.UserNotFoundError;
 import com.skyway.mapper.UserMapper;
 import com.skyway.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -40,6 +43,12 @@ public class UserService {
         return userMapper.toUserResponseDTO(user);
     }
 
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> userMapper.toUserResponseDTO(user))
+                .collect(Collectors.toList());
+    }
+
     public UserResponseDTO getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " not found"));
@@ -56,6 +65,16 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " not found"));
         user.setIsEnabled(true);
+        userRepository.save(user);
+    }
+
+    public void changeRole(Long id, Role newRole) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " not found"));
+        if (user.getRole().equals(newRole)) {
+            throw new BadCredentialsException("role is the same");
+        }
+        user.setRole(newRole);
         userRepository.save(user);
     }
 

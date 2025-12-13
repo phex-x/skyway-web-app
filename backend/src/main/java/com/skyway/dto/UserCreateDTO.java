@@ -9,7 +9,7 @@ public class UserCreateDTO {
     @Email(message = "email must be valid")
     private String email;
 
-    @NotBlank(message = "passsword can't be null")
+    @NotBlank(message = "password can't be null")
     @Size(min = 8, message = "password must be at least 8 characters")
     @Pattern(
             regexp = "^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]*$",

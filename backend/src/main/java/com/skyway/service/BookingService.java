@@ -1,22 +1,23 @@
 package com.skyway.service;
 
+import com.skyway.dto.BookingResponse;
 import com.skyway.dto.OneWayFLightResponse;
 import com.skyway.entity.*;
 import com.skyway.error.BookingDoesntExistsException;
 import com.skyway.error.InvalidCredentialException;
+import com.skyway.mapper.BookingMapper;
 import com.skyway.repository.BookingRepository;
 import com.skyway.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -25,6 +26,9 @@ public class BookingService {
 
     @Autowired
     private FlightRepository flightRepository;
+
+    @Autowired
+    private BookingMapper bookingMapper;
 
     private String generateBookingReference() {
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -50,7 +54,7 @@ public class BookingService {
                 .orElseThrow(() -> new BookingDoesntExistsException("Booking not found"));
     }
 
-    public Booking getBookingByNumberAndName(String number, String name) throws InvalidCredentialException {
+    public BookingResponse getBookingByNumberAndName(String number, String name) throws InvalidCredentialException {
         Booking booking = bookingRepository.findBookingByBookingReference(number);
         if (booking == null) {
             throw new BookingDoesntExistsException("Booking not found");
@@ -61,7 +65,7 @@ public class BookingService {
         if (!booking.getUser().getUsername().equals(name)) {
             throw new InvalidCredentialException("Invalid username or booking reference");
         }
-        return booking;
+        return bookingMapper.toBookingResponse(booking);
     }
 
 
@@ -86,13 +90,21 @@ public class BookingService {
         }
     }
 
-    public List<Booking> getAllBookingsByUserId(Long userId) {
-        return bookingRepository.findBookingsByUserId(userId);
+    public List<BookingResponse> getAllBookingsByUserId(Long userId) {
+        return bookingRepository.findBookingsByUserId(userId).stream()
+                .map(booking -> bookingMapper.toBookingResponse(booking))
+                .collect(Collectors.toList());
     }
 
     public void deleteBooking(Long id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new BookingDoesntExistsException("booking with id " + id + " not found"));
         bookingRepository.delete(booking);
+    }
+
+    public List<BookingResponse> getAllBookings() {
+        return bookingRepository.findAll().stream()
+                .map(booking -> bookingMapper.toBookingResponse(booking))
+                .collect(Collectors.toList());
     }
 }
