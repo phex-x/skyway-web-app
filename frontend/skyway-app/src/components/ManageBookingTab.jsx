@@ -1,19 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ManageBookingTab = () => {
+  const navigate = useNavigate();
   const [lastName, setLastName] = useState('');
   const [bookingCode, setBookingCode] = useState('');
 
   const handleManageBooking = (e) => {
     e.preventDefault();
-    // TODO: Implement manage booking
-    console.log('Manage booking:', { lastName, bookingCode });
+    if (!lastName || !bookingCode) {
+      alert('Заполните все поля');
+      return;
+    }
+    navigate('/manage-booking', {
+      state: {
+        lastName,
+        bookingCode
+      }
+    });
   };
 
   const handleCheckIn = (e) => {
     e.preventDefault();
-    // TODO: Implement check-in
-    console.log('Check-in:', { lastName, bookingCode });
+    if (!lastName || !bookingCode) {
+      alert('Заполните все поля');
+      return;
+    }
+    navigate('/manage-booking', {
+      state: {
+        lastName,
+        bookingCode,
+        action: 'checkin'
+      }
+    });
   };
 
   const styles = {
