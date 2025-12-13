@@ -1,0 +1,52 @@
+package com.skyway.controller;
+
+import com.skyway.dto.UserChangeRole;
+import com.skyway.dto.UserResponseDTO;
+import com.skyway.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/admin")
+public class AdminController {
+    @Autowired
+    UserService userService;
+
+    @GetMapping("/user/get-all")
+    public ResponseEntity<List<UserResponseDTO>> getAll(){
+        return ResponseEntity.ok().body(userService.getAllUsers());
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
+        return ResponseEntity.ok().body(userService.getUserById(id));
+    }
+
+    @DeleteMapping("user/delete/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id){
+        userService.deleteUserById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/disable/{id}")
+    public ResponseEntity<?> disableUserById(@PathVariable Long id){
+        userService.disableUserById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/enable/{id}")
+    public ResponseEntity<?> enableUserById(@PathVariable Long id){
+        userService.enableUserById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/change-role")
+    public ResponseEntity<?> changeRoleById(@RequestBody UserChangeRole userChangeRole){
+        userService.changeRole(userChangeRole.getId(), userChangeRole.getNewRole());
+        return ResponseEntity.ok().build();
+    }
+
+}
