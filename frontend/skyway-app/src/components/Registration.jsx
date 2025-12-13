@@ -13,7 +13,9 @@ const Registration = () => {
     firstName: '',
     lastName: '',
     phoneNumber: '',
-    birthDate: '',
+    birthDay: '',
+    birthMonth: '',
+    birthYear: '',
     country: ''
   });
 
@@ -26,6 +28,14 @@ const Registration = () => {
     'Mexico', 'South Korea', 'Netherlands', 'Switzerland', 'Sweden', 'Norway',
     'Denmark', 'Finland', 'Poland', 'Ukraine', 'Turkey', 'Saudi Arabia'
   ];
+
+  const months = [
+    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+  ];
+
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
 
   const validatePassword = (password) => {
     const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]*$/;
@@ -69,8 +79,12 @@ const Registration = () => {
       newErrors.phoneNumber = 'Phone number is invalid';
     }
 
-    if (formData.birthDate) {
-      const selectedDate = new Date(formData.birthDate);
+    if (formData.birthDay && formData.birthMonth && formData.birthYear) {
+      const selectedDate = new Date(
+        parseInt(formData.birthYear),
+        parseInt(formData.birthMonth) - 1,
+        parseInt(formData.birthDay)
+      );
       const today = new Date();
       if (selectedDate >= today) {
         newErrors.birthDate = 'Birth date must be in the past';
@@ -109,6 +123,16 @@ const Registration = () => {
     }
 
     try {
+      let birthDate = null;
+      if (formData.birthDay && formData.birthMonth && formData.birthYear) {
+        const date = new Date(
+          parseInt(formData.birthYear),
+          parseInt(formData.birthMonth) - 1,
+          parseInt(formData.birthDay)
+        );
+        birthDate = date.toISOString();
+      }
+
       const payload = {
         email: formData.email,
         password: formData.password,
@@ -116,7 +140,7 @@ const Registration = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         phoneNumber: formData.phoneNumber,
-        birthDate: formData.birthDate ? new Date(formData.birthDate).toISOString() : null,
+        birthDate: birthDate,
         country: formData.country
       };
 
@@ -139,162 +163,322 @@ const Registration = () => {
     }
   };
 
+  const styles = {
+    page: {
+      minHeight: '100vh',
+      backgroundColor: '#ececec',
+      fontFamily: 'Arial, sans-serif',
+      margin: 0,
+      padding: 0
+    },
+    header: {
+      backgroundColor: '#004758',
+      padding: '20px 40px',
+      display: 'flex',
+      alignItems: 'center'
+    },
+    logo: {
+      backgroundColor: '#B79C72',
+      color: '#004758',
+      padding: '10px 20px',
+      fontWeight: 'bold',
+      fontSize: '18px',
+      letterSpacing: '1px'
+    },
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '40px 20px'
+    },
+    title: {
+      textAlign: 'center',
+      fontSize: '24px',
+      fontWeight: 'normal',
+      color: '#000',
+      marginBottom: '5px'
+    },
+    titleBold: {
+      textAlign: 'center',
+      fontSize: '32px',
+      fontWeight: 'bold',
+      color: '#000',
+      marginBottom: '40px'
+    },
+    formContainer: {
+      backgroundColor: '#fff',
+      borderRadius: '8px',
+      padding: '40px',
+      maxWidth: '900px',
+      margin: '0 auto',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    },
+    formRow: {
+      display: 'flex',
+      gap: '20px',
+      marginBottom: '20px'
+    },
+    formCol: {
+      flex: 1
+    },
+    formGroup: {
+      marginBottom: '20px'
+    },
+    label: {
+      display: 'block',
+      marginBottom: '8px',
+      fontSize: '14px',
+      color: '#333',
+      fontWeight: '500'
+    },
+    input: {
+      width: '100%',
+      padding: '12px',
+      fontSize: '16px',
+      border: '1px solid #000',
+      borderRadius: '4px',
+      boxSizing: 'border-box'
+    },
+    select: {
+      width: '100%',
+      padding: '12px',
+      fontSize: '16px',
+      border: '1px solid #000',
+      borderRadius: '4px',
+      boxSizing: 'border-box',
+      backgroundColor: '#fff'
+    },
+    dateRow: {
+      display: 'flex',
+      gap: '10px'
+    },
+    dateField: {
+      flex: 1
+    },
+    error: {
+      color: '#d32f2f',
+      fontSize: '12px',
+      marginTop: '4px'
+    },
+    registerButton: {
+      width: '100%',
+      padding: '14px',
+      backgroundColor: '#B79C72',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '6px',
+      fontSize: '16px',
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      marginTop: '20px'
+    },
+    registerButtonDisabled: {
+      backgroundColor: '#ccc',
+      cursor: 'not-allowed'
+    },
+    generalError: {
+      backgroundColor: '#ffebee',
+      color: '#d32f2f',
+      padding: '12px',
+      borderRadius: '4px',
+      marginBottom: '20px',
+      fontSize: '14px'
+    }
+  };
+
   return (
-    <div>
-      <h2>Create Your Account</h2>
+    <div style={styles.page}>
+      <div style={styles.header}>
+        <div style={styles.logo}>SKYWAY AIRLINES</div>
+      </div>
       
-      {errors.general && (
-        <div style={{ color: 'red' }}>
-          {errors.general}
-        </div>
-      )}
+      <div style={styles.container}>
+        <h1 style={styles.title}>Стать участником программы</h1>
+        <h2 style={styles.titleBold}>SKYWAY SKYWARDS</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Email Address *
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="example@email.com"
-            required
-          />
-          {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
-        </div>
-
-        <div>
-          <label>
-            Password *
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="At least 8 characters"
-            required
-          />
-          <div>Password must be at least 8 characters</div>
-          {errors.password && <div style={{ color: 'red' }}>{errors.password}</div>}
-        </div>
-
-        <div>
-          <label>
-            Confirm Password *
-          </label>
-          <input
-            type="password"
-            name="passwordConfirmation"
-            value={formData.passwordConfirmation}
-            onChange={handleChange}
-            placeholder="Re-enter your password"
-            required
-          />
-          {errors.passwordConfirmation && (
-            <div style={{ color: 'red' }}>{errors.passwordConfirmation}</div>
+        <div style={styles.formContainer}>
+          {errors.general && (
+            <div style={styles.generalError}>
+              {errors.general}
+            </div>
           )}
+
+          <form onSubmit={handleSubmit}>
+            <div style={styles.formRow}>
+              <div style={styles.formCol}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Адрес электронной почты</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    style={styles.input}
+                    required
+                  />
+                  {errors.email && <div style={styles.error}>{errors.email}</div>}
+                </div>
+              </div>
+
+              <div style={styles.formCol}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Номер мобильного телефона</label>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    style={styles.input}
+                    required
+                  />
+                  {errors.phoneNumber && <div style={styles.error}>{errors.phoneNumber}</div>}
+                </div>
+              </div>
+            </div>
+
+            <div style={styles.formRow}>
+              <div style={styles.formCol}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Имя (латиницей)</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    style={styles.input}
+                    required
+                  />
+                  {errors.firstName && <div style={styles.error}>{errors.firstName}</div>}
+                </div>
+              </div>
+
+              <div style={styles.formCol}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Фамилия (латиницей)</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    style={styles.input}
+                    required
+                  />
+                  {errors.lastName && <div style={styles.error}>{errors.lastName}</div>}
+                </div>
+              </div>
+            </div>
+
+            <div style={styles.formRow}>
+              <div style={styles.formCol}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Дата рождения</label>
+                  <div style={styles.dateRow}>
+                    <div style={styles.dateField}>
+                      <select
+                        name="birthDay"
+                        value={formData.birthDay}
+                        onChange={handleChange}
+                        style={styles.select}
+                      >
+                        <option value="">День</option>
+                        {days.map(day => (
+                          <option key={day} value={day}>{day}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div style={styles.dateField}>
+                      <select
+                        name="birthMonth"
+                        value={formData.birthMonth}
+                        onChange={handleChange}
+                        style={styles.select}
+                      >
+                        <option value="">Месяц</option>
+                        {months.map((month, index) => (
+                          <option key={index + 1} value={index + 1}>{month}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div style={styles.dateField}>
+                      <select
+                        name="birthYear"
+                        value={formData.birthYear}
+                        onChange={handleChange}
+                        style={styles.select}
+                      >
+                        <option value="">Год</option>
+                        {years.map(year => (
+                          <option key={year} value={year}>{year}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {errors.birthDate && <div style={styles.error}>{errors.birthDate}</div>}
+                </div>
+              </div>
+
+              <div style={styles.formCol}>
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Страна / территория проживания</label>
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    style={styles.select}
+                    required
+                  >
+                    <option value="">Выберите страну</option>
+                    {countries.map(country => (
+                      <option key={country} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.country && <div style={styles.error}>{errors.country}</div>}
+                </div>
+              </div>
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>Пароль</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                style={styles.input}
+                required
+              />
+              {errors.password && <div style={styles.error}>{errors.password}</div>}
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>Подтверждение пароля</label>
+              <input
+                type="password"
+                name="passwordConfirmation"
+                value={formData.passwordConfirmation}
+                onChange={handleChange}
+                style={styles.input}
+                required
+              />
+              {errors.passwordConfirmation && (
+                <div style={styles.error}>{errors.passwordConfirmation}</div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                ...styles.registerButton,
+                ...(isSubmitting ? styles.registerButtonDisabled : {})
+              }}
+            >
+              {isSubmitting ? 'Регистрация...' : 'Зарегистрироваться'}
+            </button>
+          </form>
         </div>
-
-        <div>
-          <div>
-            <label>
-              First Name *
-            </label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder="John"
-              required
-            />
-            {errors.firstName && <div style={{ color: 'red' }}>{errors.firstName}</div>}
-          </div>
-
-          <div>
-            <label>
-              Last Name *
-            </label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Doe"
-              required
-            />
-            {errors.lastName && <div style={{ color: 'red' }}>{errors.lastName}</div>}
-          </div>
-        </div>
-
-        <div>
-          <label>
-            Phone Number *
-          </label>
-          <input
-            type="tel"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            placeholder="+1234567890"
-            required
-          />
-          {errors.phoneNumber && <div style={{ color: 'red' }}>{errors.phoneNumber}</div>}
-        </div>
-
-        <div>
-          <label>Birth Date</label>
-          <input
-            type="date"
-            name="birthDate"
-            value={formData.birthDate}
-            onChange={handleChange}
-            max={new Date().toISOString().split('T')[0]}
-          />
-          {errors.birthDate && <div style={{ color: 'red' }}>{errors.birthDate}</div>}
-          <div>Must be in the past</div>
-        </div>
-
-        <div>
-          <label>
-            Country *
-          </label>
-          <select
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select your country</option>
-            {countries.map(country => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
-          {errors.country && <div style={{ color: 'red' }}>{errors.country}</div>}
-        </div>
-
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Registering...' : 'Create Account'}
-        </button>
-
-        <div>
-          Already have an account?{' '}
-          <a 
-            href="/login"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate('/login');
-            }}
-          >
-            Sign In
-          </a>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
