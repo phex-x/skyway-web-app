@@ -29,9 +29,11 @@ public class Booking {
     @Column(name = "booking_date")
     private LocalDate bookingDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "seat_class")
     private SeatClass seatClass;
 
