@@ -31,7 +31,7 @@ public class AirportMapper {
         airportResponse.setLongtitude(airport.getLongtitude());
         airportResponse.setTimezone(airport.getTimezone());
         airportResponse.setIataCode(airport.getIataCode());
-        airportResponse.setIaoCode(airport.getIcaoCode());
+        airportResponse.setIcaoCode(airport.getIcaoCode());
 
         return airportResponse;
 
