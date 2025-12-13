@@ -6,7 +6,6 @@ import com.skyway.dto.UserLoginRequestDTO;
 import com.skyway.dto.UserResponseDTO;
 import com.skyway.entity.User;
 import com.skyway.error.*;
-import com.skyway.mapper.UserMapper;
 import com.skyway.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

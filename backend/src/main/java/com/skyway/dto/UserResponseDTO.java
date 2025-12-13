@@ -1,9 +1,11 @@
 package com.skyway.dto;
 
+import com.skyway.entity.Passenger;
 import com.skyway.entity.Role;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 public class UserResponseDTO {
     private Long id;
@@ -16,6 +18,7 @@ public class UserResponseDTO {
     private LocalDateTime updatedAt;
     private String country;
     private Role role;
+    private List<Passenger> passengers;
     private boolean isEnabled;
 
     //getters
@@ -29,6 +32,7 @@ public class UserResponseDTO {
     public LocalDateTime getUpdatedAt() {return this.updatedAt;}
     public String getCountry() {return this.country;}
     public Role getRole() {return this.role;}
+    public List<Passenger> getPassengers() {return this.passengers;}
     public boolean isEnabled() {return this.isEnabled;}
 
     //setters
@@ -42,5 +46,6 @@ public class UserResponseDTO {
     public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
     public void setCountry(String country) {this.country = country;}
     public void setRole(Role role) {this.role = role;}
+    public void setPassengers(List<Passenger> passengers) {}
     public void setEnabled(boolean enabled) {this.isEnabled = enabled;}
 }

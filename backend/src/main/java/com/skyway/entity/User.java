@@ -47,6 +47,12 @@ public class User implements UserDetails {
     @Column(name = "is_enabled")
     private Boolean isEnabled;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Passenger> passengers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
+
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -58,7 +64,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
         switch (role) {
             case ADMIN:
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -111,6 +116,8 @@ public class User implements UserDetails {
     public Role getRole() {return this.role;}
     public Boolean getIsEnabled() {return this.isEnabled;}
     public String getHashedPassword(String password) {return this.hashedPassword;}
+    public List<Passenger> getPassengers() {return this.passengers;}
+    public List<Booking> getBookings() {return this.bookings;}
 
     //setters
     public void setId(Long id) {this.id = id;}
@@ -125,4 +132,6 @@ public class User implements UserDetails {
     public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
     public void setRole(Role role) {this.role = role;}
     public void setIsEnabled(Boolean isEnabled) {this.isEnabled = isEnabled;}
+    public void setPassengers(List<Passenger> passengers) {this.passengers = passengers;}
+    public void setBookings(List<Booking> bookings) {this.bookings = bookings;}
 }

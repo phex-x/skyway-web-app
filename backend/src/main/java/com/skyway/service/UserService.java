@@ -3,6 +3,7 @@ package com.skyway.service;
 import com.skyway.dto.UserCreateDTO;
 import com.skyway.dto.UserLoginRequestDTO;
 import com.skyway.dto.UserResponseDTO;
+import com.skyway.entity.Passenger;
 import com.skyway.entity.User;
 import com.skyway.error.UserAlreadyExistsError;
 import com.skyway.error.UserNotFoundError;
@@ -10,6 +11,8 @@ import com.skyway.mapper.UserMapper;
 import com.skyway.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -27,7 +30,7 @@ public class UserService {
         user = userRepository.save(user);
         UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
         userLoginRequestDTO.setEmail(user.getEmail());
-        userLoginRequestDTO.setPassword(user.getPassword());
+        userLoginRequestDTO.setPassword(userCreateDTO.getPassword());
         return userLoginRequestDTO;
     }
 
@@ -60,5 +63,11 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " not found"));
         user.setIsEnabled(false);
+    }
+
+    public List<Passenger> getPassengerByUserId(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundError("user with id: " + id + " doesn't exist"));
+        return user.getPassengers();
     }
 }
