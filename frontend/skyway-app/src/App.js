@@ -8,6 +8,8 @@ import BookingPage from './pages/BookingPage';
 import ManageBookingPage from './pages/ManageBookingPage';
 import ProfilePage from './pages/ProfilePage';
 import BookingSearchPage from './pages/BookingSearchPage';
+import StaffPanelPage from './pages/StaffPanelPage';
+import AdminPanelPage from './pages/AdminPanelPage';
 
 const AppContent = () => {
   return (
@@ -21,6 +23,8 @@ const AppContent = () => {
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/manage-booking" element={<ManageBookingPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/staff-panel" element={<StaffPanelPage />} />
+        <Route path="/admin-panel" element={<AdminPanelPage />} />
       </Routes>
     </Router>
   );
