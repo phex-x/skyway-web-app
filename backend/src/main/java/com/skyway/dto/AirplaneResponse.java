@@ -10,7 +10,6 @@ public class AirplaneResponse {
     private String registrationNumber;
     private int economySeatsAmount;
     private int businessSeatsAmount;
-    private List<Flight> flights;
 
     //setters
     public void setId(Long id) {this.id = id;}
@@ -22,5 +21,15 @@ public class AirplaneResponse {
     public void setBusinessSeatsAmount(int businessSeatsAmount) {
         this.businessSeatsAmount = businessSeatsAmount;
     }
-    public void setFlights(List<Flight> flights) {this.flights = flights;}
+
+    //getters
+    public Long getId() {return id;}
+    public String getModel() {return model;}
+    public String getRegistrationNumber() {return registrationNumber;}
+    public int getEconomySeatsAmount() {
+        return economySeatsAmount;
+    }
+    public int getBusinessSeatsAmount() {
+        return businessSeatsAmount;
+    }
 }

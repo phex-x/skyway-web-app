@@ -23,4 +23,14 @@ public class AirportCreate {
     public OffsetDateTime getTimezone() {return this.timezone;}
     public Double getLatitude() {return this.latitude;}
     public Double getLongtitude() {return this.longtitude;}
+
+    //setters
+    public void setIataCode(String iataCode) {this.iataCode = iataCode;}
+    public void setIcaoCode(String icaoCode) {this.icaoCode = icaoCode;}
+    public void setName(String name) {this.name = name;}
+    public void setCountry(String country) {this.country = country;}
+    public void setCity(String city) {this.city = city;}
+    public void setTimezone(OffsetDateTime timezone) {this.timezone = timezone;}
+    public void setLatitude(Double latitude) {this.latitude = latitude;}
+    public void setLongtitude(Double longitude) {this.longtitude = longitude;}
 }

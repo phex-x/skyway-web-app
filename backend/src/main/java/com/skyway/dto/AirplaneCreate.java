@@ -13,4 +13,10 @@ public class AirplaneCreate {
     public String getRegistrationNumber() {return this.registrationNumber;}
     public int getEconomySeatsAmount() {return this.economySeatsAmount;}
     public int getBusinessSeatsAmount() {return this.businessSeatsAmount;}
+
+    //setters
+    public void setModel(String model) {this.model = model;}
+    public void setRegistrationNumber(String registrationNumber) {this.registrationNumber = registrationNumber;}
+    public void setEconomySeatsAmount(int economySeatsAmount) {this.economySeatsAmount = economySeatsAmount;}
+    public void setBusinessSeatsAmount(int businessSeatsAmount) {this.businessSeatsAmount = businessSeatsAmount;}
 }
