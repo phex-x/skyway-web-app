@@ -10,4 +10,5 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     public boolean existsByBookingReference(String bookingReference);
     public List<Booking> findBookingsByUserId(Long userId);
+    public Booking findBookingByBookingReference(String bookingReference);
 }
