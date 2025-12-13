@@ -1,10 +1,9 @@
 package com.skyway.controller;
 
+import com.skyway.dto.BookingResponse;
 import com.skyway.dto.BookingSearch;
 import com.skyway.dto.ManageBooking;
-import com.skyway.dto.OneWayFLightResponse;
 import com.skyway.entity.Booking;
-import com.skyway.entity.Passenger;
 import com.skyway.entity.User;
 import com.skyway.error.InvalidCredentialException;
 import com.skyway.service.BookingService;
@@ -35,7 +34,7 @@ public class BookingController {
     }
 
     @GetMapping("/my-bookings")
-    public ResponseEntity<List<Booking>> getMyBookings() {
+    public ResponseEntity<List<BookingResponse>> getMyBookings() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         assert auth != null;
         User user = (User) auth.getPrincipal();
@@ -60,8 +59,8 @@ public class BookingController {
     }
 
     @PostMapping("/search-booking")
-    public ResponseEntity<Booking> searchBooking(@RequestBody BookingSearch search) throws InvalidCredentialException {
-        Booking booking = bookingService.getBookingByNumberAndName(search.getBookingReference(),
+    public ResponseEntity<BookingResponse> searchBooking(@RequestBody BookingSearch search) throws InvalidCredentialException {
+        BookingResponse booking = bookingService.getBookingByNumberAndName(search.getBookingReference(),
                 search.getName());
 
         return ResponseEntity.ok().body(booking);
