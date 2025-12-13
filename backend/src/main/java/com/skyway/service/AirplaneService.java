@@ -27,9 +27,8 @@ public class AirplaneService {
     }
 
     public Airplane getAirplaneById(Long id){
-        Airplane airplane = airplaneRepository.findById(id)
-                .orElseThrow(() -> new AirplaneNotFoundException("airplane with id: " + id + " doecn't exists"));
-        return airplane;
+        return airplaneRepository.findById(id)
+                .orElseThrow(() -> new AirplaneNotFoundException("airplane with id: " + id + " doesn't exists"));
     }
 
     public void deleteAirplane(Long id){
