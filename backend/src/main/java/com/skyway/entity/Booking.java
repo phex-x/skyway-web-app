@@ -16,11 +16,11 @@ public class Booking {
     private String bookingReference;
 
     @OneToOne
-    @JoinColumn(referencedColumnName = "flight_id")
+    @JoinColumn(referencedColumnName = "id", name = "flight_id")
     private Flight flight;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "user_id")
+    @JoinColumn(referencedColumnName = "id", name = "user_id")
     private User user;
 
     @ManyToMany

@@ -15,15 +15,15 @@ public class Flight {
     private String flightNumber;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "airplane_id")
+    @JoinColumn(referencedColumnName = "id", name = "airplane_id")
     private Airplane airplane;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "airport_id", name = "departure_airport")
+    @JoinColumn(referencedColumnName = "id", name = "departure_airport_id")
     private Airport departureAirport;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "airport_name", name = "arrival_airport")
+    @JoinColumn(referencedColumnName = "id", name = "arrival_airport_id")
     private Airport arrivalAirport;
 
     @Column(name = "scheduled_departure")

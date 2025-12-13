@@ -41,7 +41,7 @@ public class Passenger {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "user_id")
+    @JoinColumn(referencedColumnName = "id", name = "user_id")
     private User user;
 
     //getters
