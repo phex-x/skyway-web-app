@@ -15,7 +15,7 @@ public class Booking {
     @Column(name = "booking_reference")
     private String bookingReference;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id", name = "flight_id")
     private Flight flight;
 
