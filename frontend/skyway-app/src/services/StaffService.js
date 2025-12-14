@@ -5,13 +5,17 @@ const API_URL = 'http://localhost:8080';
 
 class StaffService {
   // Airplane methods
-  async getAllAirplanes() {
+  async getAllAirplanes(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
       throw new Error('User must be authenticated');
     }
 
-    const response = await fetch(`${API_URL}/staff/airplane/get-all`, {
+    const url = new URL(`${API_URL}/staff/airplane/get-all`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -33,6 +37,7 @@ class StaffService {
 
     const data = await response.json();
     console.log('StaffService: getAllAirplanes response:', data);
+    // Возвращаем полный Page объект
     return data;
   }
 
@@ -141,13 +146,17 @@ class StaffService {
   }
 
   // Airport methods
-  async getAllAirports() {
+  async getAllAirports(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
       throw new Error('User must be authenticated');
     }
 
-    const response = await fetch(`${API_URL}/staff/airport/get-all`, {
+    const url = new URL(`${API_URL}/staff/airport/get-all`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -169,6 +178,7 @@ class StaffService {
 
     const data = await response.json();
     console.log('StaffService: getAllAirports response:', data);
+    // Возвращаем полный Page объект
     return data;
   }
 
@@ -266,13 +276,17 @@ class StaffService {
   }
 
   // Flight methods
-  async getAllFlights() {
+  async getAllFlights(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
       throw new Error('User must be authenticated');
     }
 
-    const response = await fetch(`${API_URL}/staff/flight/get-all`, {
+    const url = new URL(`${API_URL}/staff/flight/get-all`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -292,7 +306,10 @@ class StaffService {
       throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log('StaffService: getAllFlights response:', data);
+    // Возвращаем полный Page объект
+    return data;
   }
 
   async getFlight(id) {
@@ -372,7 +389,7 @@ class StaffService {
     }
 
     // В бэкенде опечатка: /flught/delete вместо /flight/delete
-    const response = await fetch(`${API_URL}/staff/flught/delete/${id}`, {
+    const response = await fetch(`${API_URL}/staff/flight/delete/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -384,25 +401,47 @@ class StaffService {
     if (!response.ok) {
       let errorMessage = 'Failed to delete flight';
       try {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorData.error || errorMessage;
+        const errorText = await response.text();
+        if (errorText) {
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch (e) {
+            errorMessage = errorText || errorMessage;
+          }
+        }
       } catch (e) {
         errorMessage = `Failed to delete flight: ${response.status} ${response.statusText}`;
       }
+      console.error('StaffService: Delete flight error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: `${API_URL}/staff/flight/delete/${id}`
+      });
       throw new Error(errorMessage);
     }
 
+    // Бэкенд возвращает пустой ответ (ResponseEntity.ok().build())
+    // Проверяем статус ответа
+    if (response.status === 200 || response.status === 204) {
+      return true;
+    }
+    
     return true;
   }
 
   // Booking methods
-  async getAllBookings() {
+  async getAllBookings(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
       throw new Error('User must be authenticated');
     }
 
-    const response = await fetch(`${API_URL}/staff/booking/get-all`, {
+    const url = new URL(`${API_URL}/staff/booking/get-all`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -422,7 +461,10 @@ class StaffService {
       throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log('StaffService: getAllBookings response:', data);
+    // Возвращаем полный Page объект
+    return data;
   }
 
   async getBooking(id) {

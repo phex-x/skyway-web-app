@@ -4,7 +4,7 @@ import authService from './AuthService';
 const API_URL = 'http://localhost:8080';
 
 class FlightService {
-  async searchOneWayFlights(searchParams) {
+  async searchOneWayFlights(searchParams, page = 0, size = 10) {
     // Форматируем дату в формат YYYY-MM-DD для Java LocalDate
     const formatDate = (dateString) => {
       if (!dateString) return null;
@@ -22,10 +22,16 @@ class FlightService {
       arrivalAirportName: searchParams.arrival,
       departureDate: formatDate(searchParams.departureDate),
       seatClass: searchParams.seatClass || 'ECONOMY',
-      passengerCount: searchParams.passengerCount || 1
+      passengerCount: searchParams.passengerCount || 1,
+      sortBy: searchParams.sortBy || 'PRICE_ASC'
     };
 
-    const response = await fetch(`${API_URL}/search/one-way`, {
+    // Добавляем параметры пагинации в URL
+    const url = new URL(`${API_URL}/search/one-way`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +54,7 @@ class FlightService {
     return await response.json();
   }
 
-  async searchRoundTripFlights(searchParams) {
+  async searchRoundTripFlights(searchParams, page = 0, size = 10) {
     // Форматируем дату в формат YYYY-MM-DD для Java LocalDate
     const formatDate = (dateString) => {
       if (!dateString) return null;
@@ -67,10 +73,16 @@ class FlightService {
       departureDate: formatDate(searchParams.departureDate),
       arrivalDate: formatDate(searchParams.returnDate),
       seatClass: searchParams.seatClass || 'ECONOMY',
-      passengerCount: searchParams.passengerCount || 1
+      passengerCount: searchParams.passengerCount || 1,
+      sortBy: searchParams.sortBy || 'PRICE_ASC'
     };
 
-    const response = await fetch(`${API_URL}/search/round-trip`, {
+    // Добавляем параметры пагинации в URL
+    const url = new URL(`${API_URL}/search/round-trip`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
