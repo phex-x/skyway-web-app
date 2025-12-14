@@ -194,16 +194,6 @@ const HomePage = () => {
               style={styles.navLink}
               onClick={(e) => {
                 e.preventDefault();
-                navigate('/destinations');
-              }}
-            >
-              НАПРАВЛЕНИЯ
-            </a>
-            <a 
-              href="#" 
-              style={styles.navLink}
-              onClick={(e) => {
-                e.preventDefault();
                 navigate('/booking-search');
               }}
             >
