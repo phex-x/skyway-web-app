@@ -10,9 +10,9 @@ import java.util.List;
 public class BookingResponse {
     private Long id;
     private String bookingReference;
-    private Flight flight;
-    private User user;
-    private List<Passenger> passengers;
+    private FlightResponse flight;
+    private UserResponseDTO user;
+    private List<PassengerResponseDTO> passengers;
     private LocalDate bookingDate;
     private Status status;
     private SeatClass seatClass;
@@ -20,9 +20,9 @@ public class BookingResponse {
     //setters
     public void setId(Long id) {this.id = id;}
     public void setBookingReference(String bookingReference) {this.bookingReference = bookingReference;}
-    public void setFlight(Flight flight) {this.flight = flight;}
-    public void setUser(User user) {this.user = user;}
-    public void setPassengers(List<Passenger> passengers) {
+    public void setFlight(FlightResponse flight) {this.flight = flight;}
+    public void setUser(UserResponseDTO user) {this.user = user;}
+    public void setPassengers(List<PassengerResponseDTO> passengers) {
         this.passengers = passengers;
     }
     public void setBookingDate(LocalDate bookingDate) {this.bookingDate = bookingDate;}

@@ -5,10 +5,13 @@ import com.skyway.dto.UserResponseDTO;
 import com.skyway.entity.Role;
 import com.skyway.entity.User;
 import com.skyway.error.PasswordsDontMatchError;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
@@ -16,6 +19,10 @@ public class UserMapper {
     public UserMapper(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
+
+    @Lazy
+    @Autowired
+    private PassengerMapper passengerMapper;
 
     public User toUser(UserCreateDTO userCreateDTO) {
         User user = new User();
@@ -49,6 +56,9 @@ public class UserMapper {
         userResponseDTO.setCountry(user.getCountry());
         userResponseDTO.setRole(user.getRole());
         userResponseDTO.setEnabled(user.getIsEnabled());
+        userResponseDTO.setPassengers(user.getPassengers().stream()
+                .map(passenger -> passengerMapper.toPassengerResponseDTO(passenger))
+                .collect(Collectors.toList()));
         return userResponseDTO;
     }
 

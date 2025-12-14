@@ -3,6 +3,7 @@ package com.skyway.controller;
 import com.skyway.dto.OneWayFLightResponse;
 import com.skyway.dto.OneWayFlightRequest;
 import com.skyway.dto.RoundTripFlightRequest;
+import com.skyway.dto.RoundTripFlightResponse;
 import com.skyway.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,12 @@ public class SearchController {
     @PostMapping("/one-way")
     public ResponseEntity<?> oneWaySearch(@RequestBody OneWayFlightRequest flightSearch) {
         List<OneWayFLightResponse> flights = flightService.getOneWayFlights(flightSearch);
-        if (flights.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(flightService.getOneWayFlights(flightSearch));
+        return ResponseEntity.ok(flights);
     }
 
     @PostMapping("/round-trip")
     public ResponseEntity<?> roundTripSearch(@RequestBody RoundTripFlightRequest flightSearch) {
-        if (flightService.getRoundTripFlights(flightSearch) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(flightService.getRoundTripFlights(flightSearch));
+        RoundTripFlightResponse response = flightService.getRoundTripFlights(flightSearch);
+        return ResponseEntity.ok(response);
     }
 }

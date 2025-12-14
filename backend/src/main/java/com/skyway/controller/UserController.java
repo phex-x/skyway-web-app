@@ -21,7 +21,7 @@ public class UserController {
     private PassengerService passengerService;
 
     @PostMapping("/passenger/add")
-    public ResponseEntity<?> createNewPassenger(PassengerCreateRequestDTO passengerCreateDTO) {
+    public ResponseEntity<?> createNewPassenger(@RequestBody PassengerCreateRequestDTO passengerCreateDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         assert auth != null;
         User user = (User) auth.getPrincipal();

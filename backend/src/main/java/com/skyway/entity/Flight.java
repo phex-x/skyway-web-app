@@ -3,6 +3,7 @@ package com.skyway.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "flights")
@@ -50,6 +51,9 @@ public class Flight {
     @Column(name = "booked_business_seats")
     private int bookedBusinessSeats;
 
+    @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY)
+    private List<Booking> bookings;
+
     //getters
     public Long getId() {return this.id; }
     public String getFlightNumber() {return this.flightNumber;}
@@ -64,6 +68,7 @@ public class Flight {
     public int getBookedEconomySeats() {return this.bookedEconomySeats;}
     public int getRemainingBusinessSeats() {return this.remainingBusinessSeats;}
     public int getBookedBusinessSeats() {return this.bookedBusinessSeats;}
+    public List<Booking> getBookings() {return this.bookings;}
 
     //setters
     public void setId(Long id) {this.id = id;}
@@ -93,4 +98,5 @@ public class Flight {
     public void setBookedBusinessSeats(int bookedBusinessSeats) {
         this.bookedBusinessSeats = bookedBusinessSeats;
     }
+    public void setBookings(List<Booking> bookings) {}
 }

@@ -8,6 +8,7 @@ import com.skyway.error.PassengerAlreadyExistsException;
 import com.skyway.error.PassengerNotFoundException;
 import com.skyway.mapper.PassengerMapper;
 import com.skyway.repository.PassengerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class PassengerService {
     @Autowired
     private PassengerMapper passengerMapper;
 
+    @Transactional
     public PassengerResponseDTO createPassenger(PassengerCreateRequestDTO passengerCreateRequestDTO, User user) {
         if (user.getPassengers().contains(passengerCreateRequestDTO)) {
             throw new PassengerAlreadyExistsException("passenger already exists");

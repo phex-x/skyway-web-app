@@ -4,6 +4,8 @@ import com.skyway.dto.PassengerCreateRequestDTO;
 import com.skyway.dto.PassengerResponseDTO;
 import com.skyway.entity.Passenger;
 import com.skyway.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Component
 public class PassengerMapper {
+
     public Passenger toPassenger(PassengerCreateRequestDTO passengerCreateRequestDTO, User user) {
         Passenger passenger = new Passenger();
         passenger.setFirstName(passengerCreateRequestDTO.getFirstName());
@@ -30,7 +33,6 @@ public class PassengerMapper {
         passengerResponseDTO.setId(passenger.getId());
         passengerResponseDTO.setFirstName(passenger.getFirstName());
         passengerResponseDTO.setLastName(passenger.getLastName());
-        passengerResponseDTO.setUser(passenger.getUser());
         passengerResponseDTO.setPassportNumber(passenger.getPassportNumber());
         passengerResponseDTO.setCitizenship(passenger.getCitizenship());
         passengerResponseDTO.setDateOfBirth(passenger.getDateOfBirth());

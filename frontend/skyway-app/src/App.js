@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import BookingSearchPage from './pages/BookingSearchPage';
 import StaffPanelPage from './pages/StaffPanelPage';
 import AdminPanelPage from './pages/AdminPanelPage';
+import DestinationsPage from './pages/DestinationsPage';
 
 const AppContent = () => {
   return (
@@ -25,6 +26,7 @@ const AppContent = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/staff-panel" element={<StaffPanelPage />} />
         <Route path="/admin-panel" element={<AdminPanelPage />} />
+        <Route path="/destinations" element={<DestinationsPage />} />
       </Routes>
     </Router>
   );

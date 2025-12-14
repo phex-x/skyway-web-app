@@ -209,7 +209,16 @@ const HomePage = () => {
             >
               УПРАВЛЕНИЕ
             </a>
-            <a href="#" style={styles.navLink}>НАПРАВЛЕНИЯ</a>
+            <a 
+              href="#" 
+              style={styles.navLink}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/destinations');
+              }}
+            >
+              НАПРАВЛЕНИЯ
+            </a>
             <a href="#" style={styles.navLink}>ОБ АВТОРЕ</a>
           </nav>
         </div>
