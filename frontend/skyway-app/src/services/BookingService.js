@@ -240,13 +240,17 @@ class BookingService {
     return await response.json();
   }
 
-  async getMyBookings() {
+  async getMyBookings(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
       throw new Error('User must be authenticated');
     }
 
-    const response = await fetch(`${API_URL}/book/my-bookings`, {
+    const url = new URL(`${API_URL}/book/my-bookings`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('size', size.toString());
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -260,13 +264,23 @@ class BookingService {
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.error || errorMessage;
+        console.error('BookingService: Error response:', errorData);
       } catch (e) {
+        const errorText = await response.text();
+        console.error('BookingService: Error response text:', errorText);
         errorMessage = `Failed to fetch bookings: ${response.status} ${response.statusText}`;
       }
+      console.error('BookingService: Request failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: url.toString()
+      });
       throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const data = await response.json();
+    // Возвращаем полный Page объект, ProfilePage сам извлечет content
+    return data;
   }
 
   async cancelBooking(bookingId) {
@@ -288,11 +302,23 @@ class BookingService {
     if (!response.ok) {
       let errorMessage = 'Failed to cancel booking';
       try {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorData.error || errorMessage;
+        const errorText = await response.text();
+        if (errorText) {
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch (e) {
+            errorMessage = errorText || errorMessage;
+          }
+        }
       } catch (e) {
         errorMessage = `Failed to cancel booking: ${response.status} ${response.statusText}`;
       }
+      console.error('BookingService: Cancel booking error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: `${API_URL}/book/cancel-booking/${bookingId}`
+      });
       throw new Error(errorMessage);
     }
 
@@ -303,8 +329,8 @@ class BookingService {
       try {
         return JSON.parse(text);
       } catch (e) {
-        // Если не JSON, возвращаем null
-        return null;
+        // Если не JSON, возвращаем true (успешная отмена)
+        return true;
       }
     }
     return true;
