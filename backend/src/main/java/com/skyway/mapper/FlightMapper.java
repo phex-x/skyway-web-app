@@ -24,9 +24,9 @@ public class FlightMapper {
         OneWayFLightResponse response = new OneWayFLightResponse();
         response.setFlightId(flight.getId());
         response.setFlightNumber(flight.getFlightNumber());
-        response.setAirplane(flight.getAirplane());
-        response.setDepartureAirport(flight.getDepartureAirport());
-        response.setArrivalAirport(flight.getArrivalAirport());
+        response.setAirplane(airplaneMapper.toDto(flight.getAirplane()));
+        response.setDepartureAirport(airportMapper.toDto(flight.getDepartureAirport()));
+        response.setArrivalAirport(airportMapper.toDto(flight.getArrivalAirport()));
         response.setDepartureTime(flight.getScheduledDeparture());
         response.setArrivalTime(flight.getScheduledArrival());
         if (seatClass.equals(SeatClass.BUSINESS)) {
