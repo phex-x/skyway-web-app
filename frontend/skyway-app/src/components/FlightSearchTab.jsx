@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CityAutocomplete from './CityAutocomplete';
+import { cities } from '../utils/cities';
 
 const FlightSearchTab = () => {
   const navigate = useNavigate();
@@ -13,19 +15,43 @@ const FlightSearchTab = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Валидация городов
     if (!departure || !arrival || !departureDate) {
       alert('Заполните все обязательные поля');
       return;
     }
+    
+    // departure и arrival уже содержат только названия городов (благодаря CityAutocomplete)
+    // Но проверяем, что они валидны
+    const departureCity = cities.find(c => c.city === departure);
+    const arrivalCity = cities.find(c => c.city === arrival);
+    
+    if (!departureCity) {
+      alert('Выберите город вылета из списка');
+      return;
+    }
+    
+    if (!arrivalCity) {
+      alert('Выберите город прибытия из списка');
+      return;
+    }
+    
+    if (departureCity.city === arrivalCity.city) {
+      alert('Город вылета и город прибытия не могут совпадать');
+      return;
+    }
+    
     if (tripType === 'round-trip' && !returnDate) {
       alert('Укажите дату возврата');
       return;
     }
     
+    // Отправляем только название города
     navigate('/flights', {
       state: {
-        departure,
-        arrival,
+        departure: departure, // Уже только название города
+        arrival: arrival, // Уже только название города
         tripType,
         departureDate,
         returnDate: tripType === 'round-trip' ? returnDate : null,
@@ -104,25 +130,21 @@ const FlightSearchTab = () => {
         </div>
       </div>
       <div style={styles.inputGroup}>
-        <label style={styles.label}>Аэропорт вылета</label>
-        <input
-          type="text"
+        <CityAutocomplete
           value={departure}
-          onChange={(e) => setDeparture(e.target.value)}
-          placeholder="Аэропорт вылета"
-          style={styles.input}
-          required
+          onChange={setDeparture}
+          placeholder="Начните вводить город вылета"
+          label="Город вылета"
+          required={true}
         />
       </div>
       <div style={styles.inputGroup}>
-        <label style={styles.label}>Аэропорт прибытия</label>
-        <input
-          type="text"
+        <CityAutocomplete
           value={arrival}
-          onChange={(e) => setArrival(e.target.value)}
-          placeholder="Аэропорт прибытия"
-          style={styles.input}
-          required
+          onChange={setArrival}
+          placeholder="Начните вводить город прибытия"
+          label="Город прибытия"
+          required={true}
         />
       </div>
       <div style={styles.inputGroup}>
