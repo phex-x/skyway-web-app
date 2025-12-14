@@ -40,8 +40,22 @@ const ProfilePage = () => {
         }
 
         // Загружаем бронирования пользователя
-        const bookingsData = await bookingService.getMyBookings();
-        setBookings(bookingsData);
+        try {
+          const bookingsData = await bookingService.getMyBookings();
+          
+          // Если это Page объект, извлекаем content
+          let bookingsList = [];
+          if (Array.isArray(bookingsData)) {
+            bookingsList = bookingsData;
+          } else if (bookingsData && typeof bookingsData === 'object' && 'content' in bookingsData) {
+            bookingsList = Array.isArray(bookingsData.content) ? bookingsData.content : [];
+          }
+          
+          setBookings(bookingsList);
+        } catch (bookingError) {
+          console.error('Error loading bookings:', bookingError);
+          setBookings([]);
+        }
       } catch (err) {
         console.error('Error loading user data:', err);
         setError(err.message || 'Ошибка при загрузке данных');
@@ -50,7 +64,9 @@ const ProfilePage = () => {
       }
     };
 
-    loadUserData();
+    if (isAuthenticated) {
+      loadUserData();
+    }
   }, [isAuthenticated, navigate]);
 
   const handleCancelBooking = async (bookingId) => {
@@ -61,12 +77,19 @@ const ProfilePage = () => {
     try {
       await bookingService.cancelBooking(bookingId);
       // Обновляем список бронирований
-      const updatedBookings = await bookingService.getMyBookings();
-      setBookings(updatedBookings);
-      alert('Бронирование отменено');
+      const updatedBookingsData = await bookingService.getMyBookings();
+      // Если это Page объект, извлекаем content
+      let updatedBookingsList = [];
+      if (Array.isArray(updatedBookingsData)) {
+        updatedBookingsList = updatedBookingsData;
+      } else if (updatedBookingsData && typeof updatedBookingsData === 'object' && 'content' in updatedBookingsData) {
+        updatedBookingsList = Array.isArray(updatedBookingsData.content) ? updatedBookingsData.content : [];
+      }
+      setBookings(updatedBookingsList);
+      alert('Бронирование успешно отменено');
     } catch (error) {
       console.error('Error canceling booking:', error);
-      alert(`Ошибка при отмене бронирования: ${error.message}`);
+      alert(`Ошибка при отмене бронирования: ${error.message || 'Неизвестная ошибка'}`);
     }
   };
 
@@ -296,32 +319,39 @@ const ProfilePage = () => {
 
         <div style={styles.section}>
           <div style={styles.sectionTitle}>Мои бронирования</div>
-          {bookings.length === 0 ? (
+          
+          {loading ? (
+            <div style={styles.loading}>Загрузка бронирований...</div>
+          ) : bookings.length === 0 ? (
             <div style={styles.noBookings}>У вас пока нет бронирований</div>
           ) : (
-            bookings.map(booking => (
+            bookings.map((booking) => (
               <div key={booking.id} style={styles.bookingCard}>
                 <div style={styles.bookingHeader}>
-                  <div style={styles.bookingReference}>
-                    Бронирование: {booking.bookingReference}
+                    <div style={styles.bookingReference}>
+                      Бронирование: {booking.bookingReference}
+                    </div>
+                    <div style={{
+                      ...styles.status,
+                      ...(booking.status === 'CONFIRMED' ? styles.statusConfirmed : styles.statusCanceled)
+                    }}>
+                      {booking.status === 'CONFIRMED' ? 'Подтверждено' : 
+                       booking.status === 'CANCELED' ? 'Отменено' : (booking.status || 'N/A')}
+                    </div>
                   </div>
-                  <div style={{
-                    ...styles.status,
-                    ...(booking.status === 'CONFIRMED' ? styles.statusConfirmed : styles.statusCanceled)
-                  }}>
-                    {booking.status === 'CONFIRMED' ? 'Подтверждено' : 
-                     booking.status === 'CANCELED' ? 'Отменено' : booking.status}
-                  </div>
-                </div>
 
                 {booking.flight && (
                   <div style={styles.flightInfo}>
                     <div><strong>Рейс:</strong> {booking.flight.flightNumber}</div>
                     <div>
                       <strong>Маршрут:</strong> {
-                        booking.flight.departureAirport?.city || booking.flight.departureAirport?.name || 'N/A'
+                        booking.flight.departureAirport?.city || 
+                        booking.flight.departureAirport?.name || 
+                        booking.flight.departureAirport?.iataCode || 'N/A'
                       } → {
-                        booking.flight.arrivalAirport?.city || booking.flight.arrivalAirport?.name || 'N/A'
+                        booking.flight.arrivalAirport?.city || 
+                        booking.flight.arrivalAirport?.name || 
+                        booking.flight.arrivalAirport?.iataCode || 'N/A'
                       }
                     </div>
                     <div>
