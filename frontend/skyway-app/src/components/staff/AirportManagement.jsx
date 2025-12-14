@@ -7,6 +7,10 @@ const AirportManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [pageSize] = useState(10);
   const [formData, setFormData] = useState({
     iataCode: '',
     icaoCode: '',
@@ -19,17 +23,46 @@ const AirportManagement = () => {
 
   useEffect(() => {
     loadAirports();
-  }, []);
+  }, [currentPage]);
 
   const loadAirports = async () => {
     try {
       setLoading(true);
-      const data = await staffService.getAllAirports();
+      const data = await staffService.getAllAirports(currentPage, pageSize);
       console.log('AirportManagement: Loaded airports:', data);
-      setAirports(data);
+      console.log('AirportManagement: totalPages:', data?.totalPages, 'totalElements:', data?.totalElements);
+      
+      // Если это Page объект, извлекаем content
+      if (data && typeof data === 'object') {
+        if ('content' in data) {
+          // Это Page объект от Spring
+          const content = Array.isArray(data.content) ? data.content : [];
+          setAirports(content);
+          setTotalPages(data.totalPages ?? 0);
+          setTotalElements(data.totalElements ?? 0);
+        } else if (Array.isArray(data)) {
+          // Если это массив напрямую (старый формат)
+          setAirports(data);
+          setTotalPages(1);
+          setTotalElements(data.length || 0);
+        } else {
+          console.warn('AirportManagement: Unexpected data format:', data);
+          setAirports([]);
+          setTotalPages(0);
+          setTotalElements(0);
+        }
+      } else {
+        console.warn('AirportManagement: Invalid data:', data);
+        setAirports([]);
+        setTotalPages(0);
+        setTotalElements(0);
+      }
     } catch (err) {
       console.error('AirportManagement: Error loading airports:', err);
       setError(err.message || 'Ошибка при загрузке аэропортов');
+      setAirports([]);
+      setTotalPages(0);
+      setTotalElements(0);
     } finally {
       setLoading(false);
     }
@@ -352,6 +385,67 @@ const AirportManagement = () => {
           )}
         </tbody>
       </table>
+
+      {/* Пагинация - показываем всегда, если есть данные */}
+      {totalElements > 0 && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
+          marginTop: '20px',
+          padding: '15px',
+          backgroundColor: '#f5f5f5',
+          borderRadius: '8px'
+        }}>
+          <button
+            style={{
+              padding: '8px 16px',
+              backgroundColor: currentPage === 0 ? '#ccc' : '#004758',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 'bold'
+            }}
+            onClick={() => {
+              if (currentPage > 0) {
+                setCurrentPage(currentPage - 1);
+              }
+            }}
+            disabled={currentPage === 0}
+          >
+            ← Назад
+          </button>
+          
+          <div style={{ padding: '8px 16px', fontSize: '14px', color: '#666', fontWeight: '500' }}>
+            Страница {currentPage + 1} из {totalPages || 1} ({totalElements} аэропортов)
+          </div>
+          
+          <button
+            style={{
+              padding: '8px 16px',
+              backgroundColor: (totalPages === 0 || currentPage >= totalPages - 1) ? '#ccc' : '#004758',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: (totalPages === 0 || currentPage >= totalPages - 1) ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              opacity: (totalPages === 0 || currentPage >= totalPages - 1) ? 0.6 : 1
+            }}
+            onClick={() => {
+              if (totalPages > 0 && currentPage < totalPages - 1) {
+                setCurrentPage(currentPage + 1);
+              }
+            }}
+            disabled={totalPages === 0 || currentPage >= totalPages - 1}
+          >
+            Вперед →
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,6 +9,10 @@ const FlightManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [pageSize] = useState(10);
   const [formData, setFormData] = useState({
     flightNumber: '',
     airplaneId: '',
@@ -24,21 +28,72 @@ const FlightManagement = () => {
 
   useEffect(() => {
     loadData();
+    loadFlights(); // Загружаем рейсы при первом рендере
   }, []);
+
+  useEffect(() => {
+    loadFlights();
+  }, [currentPage]);
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const [flightsData, airplanesData, airportsData] = await Promise.all([
-        staffService.getAllFlights(),
-        staffService.getAllAirplanes(),
-        staffService.getAllAirports()
+      const [airplanesData, airportsData] = await Promise.all([
+        staffService.getAllAirplanes(0, 1000), // Загружаем все для выпадающих списков
+        staffService.getAllAirports(0, 1000)
       ]);
-      setFlights(flightsData);
-      setAirplanes(airplanesData);
-      setAirports(airportsData);
+      setAirplanes(Array.isArray(airplanesData) ? airplanesData : (airplanesData?.content || []));
+      setAirports(Array.isArray(airportsData) ? airportsData : (airportsData?.content || []));
     } catch (err) {
       setError(err.message || 'Ошибка при загрузке данных');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadFlights = async () => {
+    try {
+      setLoading(true);
+      const flightsData = await staffService.getAllFlights(currentPage, pageSize);
+      console.log('FlightManagement: Loaded flights data:', flightsData);
+      console.log('FlightManagement: Data type:', typeof flightsData);
+      console.log('FlightManagement: Has content?', flightsData && 'content' in flightsData);
+      console.log('FlightManagement: totalPages:', flightsData?.totalPages);
+      console.log('FlightManagement: totalElements:', flightsData?.totalElements);
+      
+      // Если это Page объект, извлекаем content
+      if (flightsData && typeof flightsData === 'object') {
+        if ('content' in flightsData) {
+          // Это Page объект от Spring
+          const content = Array.isArray(flightsData.content) ? flightsData.content : [];
+          setFlights(content);
+          setTotalPages(flightsData.totalPages ?? 0);
+          setTotalElements(flightsData.totalElements ?? 0);
+          console.log('FlightManagement: Set flights:', content.length, 'totalPages:', flightsData.totalPages, 'totalElements:', flightsData.totalElements);
+        } else if (Array.isArray(flightsData)) {
+          // Если это массив напрямую (старый формат)
+          setFlights(flightsData);
+          setTotalPages(1);
+          setTotalElements(flightsData.length || 0);
+        } else {
+          // Если данные в другом формате
+          console.warn('FlightManagement: Unexpected data format:', flightsData);
+          setFlights([]);
+          setTotalPages(0);
+          setTotalElements(0);
+        }
+      } else {
+        console.warn('FlightManagement: Invalid data:', flightsData);
+        setFlights([]);
+        setTotalPages(0);
+        setTotalElements(0);
+      }
+    } catch (err) {
+      console.error('FlightManagement: Error loading flights:', err);
+      setError(err.message || 'Ошибка при загрузке рейсов');
+      setFlights([]);
+      setTotalPages(0);
+      setTotalElements(0);
     } finally {
       setLoading(false);
     }
@@ -93,7 +148,7 @@ const FlightManagement = () => {
         remainingEconomySeats: 0,
         remainingBusinessSeats: 0
       });
-      loadData();
+      loadFlights();
       alert('Рейс успешно создан');
     } catch (err) {
       alert(`Ошибка: ${err.message}`);
@@ -101,15 +156,17 @@ const FlightManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Вы уверены, что хотите удалить этот рейс?')) {
+    if (!window.confirm('Вы уверены, что хотите удалить этот рейс? Если у рейса есть бронирования, удаление будет невозможно.')) {
       return;
     }
     try {
       await staffService.deleteFlight(id);
-      loadData();
+      // Обновляем список рейсов после удаления
+      await loadFlights();
       alert('Рейс успешно удален');
     } catch (err) {
-      alert(`Ошибка: ${err.message}`);
+      console.error('FlightManagement: Error deleting flight:', err);
+      alert(`Ошибка при удалении рейса: ${err.message || 'Неизвестная ошибка'}`);
     }
   };
 
@@ -457,6 +514,68 @@ const FlightManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Пагинация - показываем всегда, если есть данные */}
+      {totalElements > 0 && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
+          marginTop: '20px',
+          padding: '15px',
+          backgroundColor: '#f5f5f5',
+          borderRadius: '8px'
+        }}>
+          <button
+            style={{
+              padding: '8px 16px',
+              backgroundColor: currentPage === 0 ? '#ccc' : '#004758',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              opacity: currentPage === 0 ? 0.6 : 1
+            }}
+            onClick={() => {
+              if (currentPage > 0) {
+                setCurrentPage(currentPage - 1);
+              }
+            }}
+            disabled={currentPage === 0}
+          >
+            ← Назад
+          </button>
+          
+          <div style={{ padding: '8px 16px', fontSize: '14px', color: '#666', fontWeight: '500' }}>
+            Страница {currentPage + 1} из {totalPages || 1} ({totalElements} рейсов)
+          </div>
+          
+          <button
+            style={{
+              padding: '8px 16px',
+              backgroundColor: (totalPages === 0 || currentPage >= totalPages - 1) ? '#ccc' : '#004758',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: (totalPages === 0 || currentPage >= totalPages - 1) ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              opacity: (totalPages === 0 || currentPage >= totalPages - 1) ? 0.6 : 1
+            }}
+            onClick={() => {
+              if (totalPages > 0 && currentPage < totalPages - 1) {
+                setCurrentPage(currentPage + 1);
+              }
+            }}
+            disabled={totalPages === 0 || currentPage >= totalPages - 1}
+          >
+            Вперед →
+          </button>
+        </div>
+      )}
     </div>
   );
 };

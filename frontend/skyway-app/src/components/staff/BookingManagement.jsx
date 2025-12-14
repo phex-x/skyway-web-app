@@ -15,7 +15,11 @@ const BookingManagement = () => {
     try {
       setLoading(true);
       const data = await staffService.getAllBookings();
-      setBookings(data);
+      console.log('BookingManagement: Bookings data received:', data);
+      // Если это Page объект, извлекаем content
+      const bookingsList = Array.isArray(data) ? data : (data?.content || []);
+      console.log('BookingManagement: Processed bookings:', bookingsList);
+      setBookings(bookingsList);
     } catch (err) {
       setError(err.message || 'Ошибка при загрузке бронирований');
     } finally {
@@ -195,13 +199,26 @@ const BookingManagement = () => {
                     {booking.flight?.flightNumber || 'N/A'}
                     <br />
                     <small>
-                      {booking.flight?.departureAirport?.iataCode || 'N/A'} → {booking.flight?.arrivalAirport?.iataCode || 'N/A'}
+                      {booking.flight?.departureAirport?.iataCode || 
+                       booking.flight?.departureAirport?.city || 
+                       booking.flight?.departureAirport?.name || 
+                       'N/A'} → {
+                       booking.flight?.arrivalAirport?.iataCode || 
+                       booking.flight?.arrivalAirport?.city || 
+                       booking.flight?.arrivalAirport?.name || 
+                       'N/A'}
                     </small>
                   </td>
                   <td style={styles.td}>
-                    {booking.user?.firstName} {booking.user?.lastName}
-                    <br />
-                    <small>{booking.user?.email}</small>
+                    {booking.user?.firstName || ''} {booking.user?.lastName || ''}
+                    {booking.user?.firstName || booking.user?.lastName ? (
+                      <>
+                        <br />
+                        <small>{booking.user?.email || 'N/A'}</small>
+                      </>
+                    ) : (
+                      <span style={{ color: '#d32f2f' }}>Данные не загружены</span>
+                    )}
                   </td>
                   <td style={styles.td}>{formatDate(booking.bookingDate)}</td>
                   <td style={styles.td}>
@@ -219,6 +236,15 @@ const BookingManagement = () => {
                   </td>
                   <td style={styles.td}>
                     {booking.passengers?.length || 0} пассажир(ов)
+                    {booking.passengers && booking.passengers.length > 0 && (
+                      <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
+                        {booking.passengers.map((p, idx) => (
+                          <div key={p.id || `passenger-${booking.id}-${idx}`}>
+                            {p.firstName} {p.lastName}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </td>
                   <td style={styles.td}>
                     <div style={styles.buttonGroup}>
