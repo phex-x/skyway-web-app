@@ -7,10 +7,8 @@ import com.skyway.dto.RoundTripFlightResponse;
 import com.skyway.entity.Flight;
 import com.skyway.entity.SeatClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class FlightMapper {
@@ -38,17 +36,13 @@ public class FlightMapper {
         return response;
     }
 
-    public RoundTripFlightResponse toRoundTripFlightResponse(List<Flight> flightTo, List<Flight> flightBack, SeatClass seatClass) {
+    public RoundTripFlightResponse toRoundTripFlightResponse(Page<Flight> flightTo, Page<Flight> flightBack, SeatClass seatClass) {
         RoundTripFlightResponse response = new RoundTripFlightResponse();
         response.setFlightTo(
-                flightTo.stream()
-                        .map(flight -> toOneWayResponse(flight, seatClass))
-                        .collect(Collectors.toList())
+                flightTo.map(flight -> toOneWayResponse(flight, seatClass))
         );
         response.setFlightBack(
-                flightBack.stream()
-                        .map(flight -> toOneWayResponse(flight, seatClass))
-                        .collect(Collectors.toList())
+                flightBack.map(flight -> toOneWayResponse(flight, seatClass))
         );
 
         return response;

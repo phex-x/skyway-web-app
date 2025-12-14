@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
@@ -56,9 +55,6 @@ public class UserMapper {
         userResponseDTO.setCountry(user.getCountry());
         userResponseDTO.setRole(user.getRole());
         userResponseDTO.setEnabled(user.getIsEnabled());
-        userResponseDTO.setPassengers(user.getPassengers().stream()
-                .map(passenger -> passengerMapper.toPassengerResponseDTO(passenger))
-                .collect(Collectors.toList()));
         return userResponseDTO;
     }
 
