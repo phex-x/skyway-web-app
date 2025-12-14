@@ -5,6 +5,10 @@ import com.skyway.dto.PassengerResponseDTO;
 import com.skyway.entity.User;
 import com.skyway.service.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -44,12 +48,14 @@ public class UserController {
     }
 
     @GetMapping("/getAllPassengers")
-    public ResponseEntity<?> getAllPassengers() {
+    public ResponseEntity<Page<PassengerResponseDTO>> getAllPassengers(@PageableDefault(
+            size = 10, sort = "id", direction = Sort.Direction.DESC
+    ) Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         assert auth != null;
         User user = (User) auth.getPrincipal();
 
-        List<PassengerResponseDTO> passengers = passengerService.getAllPassengers();
+        Page<PassengerResponseDTO> passengers = passengerService.getAllPassengers(pageable);
 
         return new ResponseEntity<>(passengers, HttpStatus.OK);
     }

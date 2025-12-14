@@ -9,15 +9,17 @@ import com.skyway.mapper.BookingMapper;
 import com.skyway.repository.BookingRepository;
 import com.skyway.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -90,10 +92,10 @@ public class BookingService {
         }
     }
 
-    public List<BookingResponse> getAllBookingsByUserId(Long userId) {
-        return bookingRepository.findBookingsByUserId(userId).stream()
-                .map(booking -> bookingMapper.toBookingResponse(booking))
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<BookingResponse> getAllBookingsByUserId(Long userId, Pageable pageable) {
+        return bookingRepository.findBookingsByUserId(userId, pageable)
+                .map(booking -> bookingMapper.toBookingResponse(booking));
     }
 
     public void deleteBooking(Long id) {
@@ -102,9 +104,8 @@ public class BookingService {
         bookingRepository.delete(booking);
     }
 
-    public List<BookingResponse> getAllBookings() {
-        return bookingRepository.findAll().stream()
-                .map(booking -> bookingMapper.toBookingResponse(booking))
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<BookingResponse> getAllBookings(Pageable pageable) {
+        return bookingRepository.findAll(pageable).map(booking -> bookingMapper.toBookingResponse(booking));
     }
 }

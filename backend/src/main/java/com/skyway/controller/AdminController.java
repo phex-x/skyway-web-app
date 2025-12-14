@@ -4,6 +4,10 @@ import com.skyway.dto.UserChangeRole;
 import com.skyway.dto.UserResponseDTO;
 import com.skyway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +20,13 @@ public class AdminController {
     UserService userService;
 
     @GetMapping("/user/get-all")
-    public ResponseEntity<List<UserResponseDTO>> getAll(){
-        return ResponseEntity.ok().body(userService.getAllUsers());
+    public ResponseEntity<Page<UserResponseDTO>> getAll(
+            @PageableDefault(size = 10,
+                    sort = "id",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable
+    ){
+        return ResponseEntity.ok().body(userService.getAllUsers(pageable));
     }
 
     @GetMapping("/user/{id}")

@@ -1,6 +1,5 @@
 package com.skyway.dto;
 
-import com.skyway.entity.Passenger;
 import com.skyway.entity.Role;
 
 import java.time.LocalDateTime;

@@ -8,6 +8,8 @@ import com.skyway.error.AirportDoesntExists;
 import com.skyway.mapper.AirportMapper;
 import com.skyway.repository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,10 +38,8 @@ public class AirportService {
         .orElseThrow(() -> new AirportDoesntExists("airport not found")));
     }
 
-    public List<AirportResponse> getAllAirports() {
-        return airportRepository.findAll().stream()
-                .map(airport -> airportMapper.toDto(airport))
-                .collect(Collectors.toList());
+    public Page<AirportResponse> getAllAirports(Pageable pageable) {
+        return airportRepository.findAll(pageable).map(airport -> airportMapper.toDto(airport));
     }
 
     public void deleteAirport(Long id) {

@@ -8,13 +8,16 @@ import com.skyway.entity.User;
 import com.skyway.error.InvalidCredentialException;
 import com.skyway.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 
 @RestController()
 @RequestMapping("/book")
@@ -34,14 +37,16 @@ public class BookingController {
     }
 
     @GetMapping("/my-bookings")
-    public ResponseEntity<List<BookingResponse>> getMyBookings() {
+    public ResponseEntity<Page<BookingResponse>> getMyBookings(
+            @PageableDefault(size = 10,
+            sort = "id",
+            direction = Sort.Direction.DESC) Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         assert auth != null;
         User user = (User) auth.getPrincipal();
 
         assert user != null;
-        bookingService.getAllBookingsByUserId(user.getId());
-        return ResponseEntity.ok().body(bookingService.getAllBookingsByUserId(user.getId()));
+        return ResponseEntity.ok().body(bookingService.getAllBookingsByUserId(user.getId(), pageable));
     }
 
     @GetMapping("/my-booking/{id}")

@@ -2,9 +2,14 @@ package com.skyway.service;
 
 import com.skyway.dto.*;
 import com.skyway.entity.Flight;
+import com.skyway.entity.SeatClass;
 import com.skyway.mapper.FlightMapper;
 import com.skyway.repository.FlightRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,50 +36,129 @@ public class FlightService {
         return flightsMapper.toFlightResponse(flight);
     }
 
-    public List<FlightResponse> getAllFlights() {
-        return flightRepository.findAll().stream()
-                .map(flight -> flightsMapper.toFlightResponse(flight))
-                .collect(Collectors.toList());
+    public Page<FlightResponse> getAllFlights(Pageable pageable) {
+        return flightRepository.findAll(pageable).map(flight -> flightsMapper.toFlightResponse(flight));
     }
 
+    @Transactional
     public void deleteFlight(Long id) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Flight not found"));
 
+        if (flight.getBookings() != null && !flight.getBookings().isEmpty()) {
+            throw new RuntimeException("Cannot delete flight: there are existing bookings for this flight");
+        }
+
         flightRepository.delete(flight);
     }
 
-    public List<OneWayFLightResponse> getOneWayFlights(OneWayFlightRequest oneWayFlightRequest) {
-        List<Flight> flights = flightRepository.flightSearch(
-                oneWayFlightRequest.getDepartureAirportName(),
-                oneWayFlightRequest.getArrivalAirportName(),
-                oneWayFlightRequest.getDepartureDate(),
-                oneWayFlightRequest.getPassengerCount(),
-                oneWayFlightRequest.getSeatClass().name()
+    public Page<OneWayFLightResponse> getOneWayFlights(OneWayFlightRequest request, Pageable pageable) {
+        Pageable sortedPageable = createSortedPageable(pageable, request);
+
+        Page<Flight> flights = flightRepository.flightSearch(
+                request.getDepartureAirportName(),
+                request.getArrivalAirportName(),
+                request.getDepartureDate(),
+                request.getPassengerCount(),
+                request.getSeatClass().name(),
+                sortedPageable
         );
 
-        return flights.stream()
-                .map(flight -> flightsMapper.toOneWayResponse(flight, oneWayFlightRequest.getSeatClass()))
-                .collect(Collectors.toList());
+        return flights.map(flight ->
+                flightsMapper.toOneWayResponse(flight, request.getSeatClass())
+        );
     }
 
-    public RoundTripFlightResponse getRoundTripFlights(RoundTripFlightRequest roundTripFlightRequest) {
-        List<Flight> flightsTo = flightRepository.flightSearch(
-                roundTripFlightRequest.getDepartureAirportName(),
-                roundTripFlightRequest.getArrivalAirportName(),
-                roundTripFlightRequest.getDepartureDate(),
-                roundTripFlightRequest.getPassengerCount(),
-                roundTripFlightRequest.getSeatClass().name()
+    private Pageable createSortedPageable(Pageable pageable, OneWayFlightRequest request) {
+        Sort sort;
+
+        switch (request.getSortBy()) {
+            case PRICE_DESC:
+                String priceFieldDesc = request.getSeatClass() == SeatClass.BUSINESS ?
+                        "businessSeatPrice" : "economySeatPrice";
+                sort = Sort.by(Sort.Direction.DESC, priceFieldDesc);
+                break;
+
+            case DEPARTURE_ASC:
+                sort = Sort.by(Sort.Direction.ASC, "scheduledDeparture");
+                break;
+
+            case DEPARTURE_DESC:
+                sort = Sort.by(Sort.Direction.DESC, "scheduledDeparture");
+                break;
+
+            case PRICE_ASC:
+            default:
+                String priceFieldAsc = request.getSeatClass() == SeatClass.BUSINESS ?
+                        "businessSeatPrice" : "economySeatPrice";
+                sort = Sort.by(Sort.Direction.ASC, priceFieldAsc);
+                break;
+        }
+
+        return org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sort
+        );
+    }
+
+    public RoundTripFlightResponse getRoundTripFlights(RoundTripFlightRequest request, Pageable pageable) {
+        Pageable pageableTo = createSortedPageable(pageable, request);
+
+        Pageable pageableFrom = createSortedPageable(pageable, request);
+
+        Page<Flight> flightsTo = flightRepository.flightSearch(
+                request.getDepartureAirportName(),
+                request.getArrivalAirportName(),
+                request.getDepartureDate(),
+                request.getPassengerCount(),
+                request.getSeatClass().name(),
+                pageableTo
         );
 
-        List<Flight> flightsFrom = flightRepository.flightSearch(
-                roundTripFlightRequest.getArrivalAirportName(),
-                roundTripFlightRequest.getDepartureAirportName(),
-                roundTripFlightRequest.getArrivalDate(),
-                roundTripFlightRequest.getPassengerCount(),
-                roundTripFlightRequest.getSeatClass().name()
+        // Поиск рейсов "обратно"
+        Page<Flight> flightsFrom = flightRepository.flightSearch(
+                request.getArrivalAirportName(),
+                request.getDepartureAirportName(),
+                request.getArrivalDate(),
+                request.getPassengerCount(),
+                request.getSeatClass().name(),
+                pageableFrom
         );
 
-        return flightsMapper.toRoundTripFlightResponse(flightsTo, flightsFrom, roundTripFlightRequest.getSeatClass());
+        return flightsMapper.toRoundTripFlightResponse(flightsTo, flightsFrom, request.getSeatClass());
+    }
+
+    private Pageable createSortedPageable(Pageable pageable, RoundTripFlightRequest request) {
+        Sort sort;
+
+        switch (request.getSortBy()) {
+            case PRICE_DESC:
+                String priceFieldDesc = request.getSeatClass() == SeatClass.BUSINESS ?
+                        "businessSeatPrice" : "economySeatPrice";
+                sort = Sort.by(Sort.Direction.DESC, priceFieldDesc);
+                break;
+
+            case DEPARTURE_ASC:
+                sort = Sort.by(Sort.Direction.ASC, "scheduledDeparture");
+                break;
+
+            case DEPARTURE_DESC:
+                sort = Sort.by(Sort.Direction.DESC, "scheduledDeparture");
+                break;
+
+            case PRICE_ASC:
+            default:
+                String priceFieldAsc = request.getSeatClass() == SeatClass.BUSINESS ?
+                        "businessSeatPrice" : "economySeatPrice";
+                sort = Sort.by(Sort.Direction.ASC, priceFieldAsc);
+                break;
+        }
+
+        return org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sort
+        );
     }
 }

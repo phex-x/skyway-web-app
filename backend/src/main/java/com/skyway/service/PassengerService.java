@@ -10,11 +10,9 @@ import com.skyway.mapper.PassengerMapper;
 import com.skyway.repository.PassengerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PassengerService {
@@ -39,14 +37,9 @@ public class PassengerService {
         return passengerMapper.toPassengerResponseDTO(passenger);
     }
 
-    public List<PassengerResponseDTO> getAllPassengers() {
-        List<Passenger> passengers = passengerRepository.findAll();
-        List<PassengerResponseDTO> passengerResponseDTOS = new ArrayList<>();
-
-        for (Passenger passenger : passengers) {
-            passengerResponseDTOS.add(passengerMapper.toPassengerResponseDTO(passenger));
-        }
-        return passengerResponseDTOS;
+    public Page<PassengerResponseDTO> getAllPassengers(Pageable pageable) {
+        Page<Passenger> passengers = passengerRepository.findAll(pageable);
+        return passengers.map(passengerMapper::toPassengerResponseDTO);
     }
 
     public void deletePassengerById(Long passengerId) {

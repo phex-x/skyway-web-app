@@ -7,6 +7,10 @@ import com.skyway.service.AirportService;
 import com.skyway.service.BookingService;
 import com.skyway.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,8 +53,10 @@ public class StaffController {
     }
 
     @GetMapping("/airplane/get-all")
-    public ResponseEntity<List<AirplaneResponse>> getAllAirplane(){
-        return ResponseEntity.ok().body(airplaneService.getAllAirplanes());
+    public ResponseEntity<Page<AirplaneResponse>> getAllAirplane(@PageableDefault(
+            size = 10, sort = "id", direction = Sort.Direction.DESC
+    ) Pageable pageable){
+        return ResponseEntity.ok().body(airplaneService.getAllAirplanes(pageable));
     }
 
     @PostMapping("/airport/create")
@@ -70,8 +76,10 @@ public class StaffController {
     }
 
     @GetMapping("/airport/get-all")
-    public ResponseEntity<List<AirportResponse>> getAllAirport(){
-        return ResponseEntity.ok().body(airportService.getAllAirports());
+    public ResponseEntity<Page<AirportResponse>> getAllAirport(@PageableDefault(
+            size = 10, sort = "id", direction = Sort.Direction.DESC
+    ) Pageable pageable){
+        return ResponseEntity.ok().body(airportService.getAllAirports(pageable));
     }
 
     @GetMapping("/booking/{id}")
@@ -80,8 +88,10 @@ public class StaffController {
     }
 
     @GetMapping("/booking/get-all")
-    public ResponseEntity<List<BookingResponse>> getAllBooking(){
-        return ResponseEntity.ok().body(bookingService.getAllBookings());
+    public ResponseEntity<Page<BookingResponse>> getAllBooking(@PageableDefault(
+            size = 10, sort = "id", direction = Sort.Direction.DESC
+    ) Pageable pageable){
+        return ResponseEntity.ok().body(bookingService.getAllBookings(pageable));
     }
 
     @PostMapping("/booking/cancel/{id}")
@@ -107,8 +117,10 @@ public class StaffController {
     }
 
     @GetMapping("/flight/get-all")
-    public ResponseEntity<List<FlightResponse>> getAllFlight(){
-        return ResponseEntity.ok().body(flightService.getAllFlights());
+    public ResponseEntity<Page<FlightResponse>> getAllFlight(@PageableDefault(
+            size = 10, sort = "id", direction = Sort.Direction.DESC
+    ) Pageable pageable){
+        return ResponseEntity.ok().body(flightService.getAllFlights(pageable));
     }
 
     @DeleteMapping("/flight/delete/{id}")

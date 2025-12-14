@@ -1,20 +1,22 @@
 package com.skyway.dto;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public class RoundTripFlightResponse {
-    private List<OneWayFLightResponse> flightTo;
-    private List<OneWayFLightResponse> flightBack;
+    private Page<OneWayFLightResponse> flightTo;
+    private Page<OneWayFLightResponse> flightBack;
 
     //getters
-    public List<OneWayFLightResponse> getFlightTo() {return flightTo;}
-    public List<OneWayFLightResponse> getFlightBack() {return flightBack;}
+    public Page<OneWayFLightResponse> getFlightTo() {return flightTo;}
+    public Page<OneWayFLightResponse> getFlightBack() {return flightBack;}
 
     //setters
-    public void setFlightTo(List<OneWayFLightResponse> flightTo) {
+    public void setFlightTo(Page<OneWayFLightResponse> flightTo) {
         this.flightTo = flightTo;
     }
-    public void setFlightBack(List<OneWayFLightResponse> flightBack) {
+    public void setFlightBack(Page<OneWayFLightResponse> flightBack) {
         this.flightBack = flightBack;
     }
 }
