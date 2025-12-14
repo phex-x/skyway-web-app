@@ -1,5 +1,6 @@
 package com.skyway.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id", name = "flight_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Flight flight;
 
     @ManyToOne
