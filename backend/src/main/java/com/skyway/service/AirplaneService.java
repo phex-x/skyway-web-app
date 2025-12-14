@@ -8,6 +8,8 @@ import com.skyway.error.AirplaneNotFoundException;
 import com.skyway.mapper.AirplaneMapper;
 import com.skyway.repository.AirplaneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,10 +47,8 @@ public class AirplaneService {
         return airplaneRepository.existsByRegistrationNumber(code);
     }
 
-    public List<AirplaneResponse> getAllAirplanes(){
-        List<Airplane> airplanes = airplaneRepository.findAll();
-        return airplanes.stream()
-                .map(flight -> airplaneMapper.toDto(flight))
-                .collect(Collectors.toList());
+    public Page<AirplaneResponse> getAllAirplanes(Pageable pageable){
+        Page<Airplane> airplanes = airplaneRepository.findAll(pageable);
+        return airplanes.map(flight -> airplaneMapper.toDto(flight));
     }
 }

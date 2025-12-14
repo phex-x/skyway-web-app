@@ -11,11 +11,12 @@ import com.skyway.error.UserNotFoundError;
 import com.skyway.mapper.UserMapper;
 import com.skyway.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -43,10 +44,9 @@ public class UserService {
         return userMapper.toUserResponseDTO(user);
     }
 
-    public List<UserResponseDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(user -> userMapper.toUserResponseDTO(user))
-                .collect(Collectors.toList());
+    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(user -> userMapper.toUserResponseDTO(user));
     }
 
     public UserResponseDTO getUserById(Long id) {
