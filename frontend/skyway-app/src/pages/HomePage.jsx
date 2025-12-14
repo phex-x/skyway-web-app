@@ -219,7 +219,7 @@ const HomePage = () => {
             >
               НАПРАВЛЕНИЯ
             </a>
-            <a href="#" style={styles.navLink}>ОБ АВТОРЕ</a>
+            <a href="/about" style={styles.navLink}>ОБ АВТОРЕ</a>
           </nav>
         </div>
         <div style={styles.userInfo}>
