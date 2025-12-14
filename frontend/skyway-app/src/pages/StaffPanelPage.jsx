@@ -1,5 +1,5 @@
 // src/pages/StaffPanelPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AirplaneManagement from '../components/staff/AirplaneManagement';
@@ -12,8 +12,13 @@ const StaffPanelPage = () => {
   const { user, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('airplanes');
 
+  useEffect(() => {
+    if (!isAuthenticated || user?.role !== 'STAFF') {
+      navigate('/');
+    }
+  }, [isAuthenticated, user, navigate]);
+
   if (!isAuthenticated || user?.role !== 'STAFF') {
-    navigate('/');
     return null;
   }
 
