@@ -61,10 +61,7 @@ public class BookingService {
         if (booking == null) {
             throw new BookingDoesntExistsException("Booking not found");
         }
-        if (booking.getBookingDate().isAfter(LocalDate.now())) {
-            throw new BookingDoesntExistsException("Booking expired");
-        }
-        if (!booking.getUser().getUsername().equals(name)) {
+        if (!booking.getUser().getFirstName().equals(name)) {
             throw new InvalidCredentialException("Invalid username or booking reference");
         }
         return bookingMapper.toBookingResponse(booking);
