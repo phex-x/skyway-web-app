@@ -28,10 +28,27 @@ const ManageBookingPage = () => {
       setLoading(false);
     }
   };
-
-  const handleCheckIn = () => {
-    // TODO: Реализовать регистрацию на рейс
-    alert('Регистрация на рейс');
+  
+  const handleCancelBooking = async () => {
+    if (!booking || booking.status !== 'CONFIRMED') return;
+    
+    if (!window.confirm('Вы уверены, что хотите отменить это бронирование?')) {
+      return;
+    }
+    
+    try {
+      await bookingService.cancelBooking(booking.id);
+      // Обновляем статус локально, чтобы сразу отобразить результат
+      setBooking({ ...booking, status: 'CANCELED' });
+      alert('Бронирование успешно отменено');
+    } catch (error) {
+      console.error('Cancel booking error:', error);
+      if (error.message && error.message.includes('401')) {
+        alert('Для отмены бронирования необходимо войти в личный кабинет.');
+      } else {
+        alert(`Ошибка при отмене бронирования: ${error.message || 'Неизвестная ошибка'}`);
+      }
+    }
   };
 
   const styles = {
@@ -90,17 +107,6 @@ const ManageBookingPage = () => {
       cursor: 'pointer',
       whiteSpace: 'nowrap'
     },
-    checkInButton: {
-      padding: '12px 20px',
-      backgroundColor: '#8B6914',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '16px',
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      whiteSpace: 'nowrap'
-    },
     backButton: {
       padding: '10px 20px',
       backgroundColor: '#004758',
@@ -116,6 +122,17 @@ const ManageBookingPage = () => {
       padding: '20px',
       borderRadius: '4px',
       marginTop: '20px'
+    },
+    cancelButton: {
+      padding: '10px 24px',
+      backgroundColor: '#d32f2f',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      fontSize: '14px',
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      marginTop: '15px'
     },
     error: {
       color: '#d32f2f',
@@ -161,11 +178,6 @@ const ManageBookingPage = () => {
           <button type="submit" style={styles.button} disabled={loading}>
             {loading ? 'Поиск...' : 'Управление бронированием'}
           </button>
-          {booking && (
-            <button type="button" style={styles.checkInButton} onClick={handleCheckIn}>
-              Регистрация
-            </button>
-          )}
         </form>
 
         {error && <div style={styles.error}>{error}</div>}
@@ -216,6 +228,17 @@ const ManageBookingPage = () => {
                   </div>
                 ))}
               </div>
+            )}
+            {booking.status === 'CONFIRMED' &&
+             booking.flight &&
+             new Date(booking.flight.scheduledDeparture) > new Date() && (
+              <button
+                type="button"
+                style={styles.cancelButton}
+                onClick={handleCancelBooking}
+              >
+                Отменить бронирование
+              </button>
             )}
           </div>
         )}
