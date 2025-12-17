@@ -20,21 +20,6 @@ const ManageBookingTab = () => {
     });
   };
 
-  const handleCheckIn = (e) => {
-    e.preventDefault();
-    if (!lastName || !bookingCode) {
-      alert('Заполните все поля');
-      return;
-    }
-    navigate('/manage-booking', {
-      state: {
-        lastName,
-        bookingCode,
-        action: 'checkin'
-      }
-    });
-  };
-
   const styles = {
     formContainer: {
       backgroundColor: '#f5f5f5',
@@ -99,9 +84,6 @@ const ManageBookingTab = () => {
       </div>
       <button onClick={handleManageBooking} style={styles.button}>
         Управление бронированием
-      </button>
-      <button onClick={handleCheckIn} style={styles.button}>
-        Регистрация
       </button>
     </div>
   );
