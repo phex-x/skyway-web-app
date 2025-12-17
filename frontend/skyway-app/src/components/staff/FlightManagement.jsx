@@ -161,8 +161,9 @@ const FlightManagement = () => {
     }
     try {
       await staffService.deleteFlight(id);
-      // Обновляем список рейсов после удаления
-      await loadFlights();
+      // Удаляем рейс из локального состояния, чтобы сразу обновить таблицу
+      setFlights((prevFlights) => prevFlights.filter((flight) => flight.id !== id));
+      setTotalElements((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : 0));
       alert('Рейс успешно удален');
     } catch (err) {
       console.error('FlightManagement: Error deleting flight:', err);
