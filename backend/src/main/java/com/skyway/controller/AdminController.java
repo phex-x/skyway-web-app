@@ -2,6 +2,7 @@ package com.skyway.controller;
 
 import com.skyway.dto.UserChangeRole;
 import com.skyway.dto.UserResponseDTO;
+import com.skyway.service.AdminService;
 import com.skyway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,9 @@ import java.util.List;
 public class AdminController {
     @Autowired
     UserService userService;
+
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping("/user/get-all")
     public ResponseEntity<Page<UserResponseDTO>> getAll(
@@ -56,6 +60,11 @@ public class AdminController {
     public ResponseEntity<?> changeRoleById(@RequestBody UserChangeRole userChangeRole){
         userService.changeRole(userChangeRole.getId(), userChangeRole.getNewRole());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<?> statistics(){
+        return ResponseEntity.ok().body(adminService.getStatistics());
     }
 
 }

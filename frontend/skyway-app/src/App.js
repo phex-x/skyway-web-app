@@ -11,6 +11,7 @@ import BookingSearchPage from './pages/BookingSearchPage';
 import StaffPanelPage from './pages/StaffPanelPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 import DestinationsPage from './pages/DestinationsPage';
+import AboutPage from './pages/AboutPage';
 
 const AppContent = () => {
   return (
@@ -27,6 +28,7 @@ const AppContent = () => {
         <Route path="/staff-panel" element={<StaffPanelPage />} />
         <Route path="/admin-panel" element={<AdminPanelPage />} />
         <Route path="/destinations" element={<DestinationsPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );

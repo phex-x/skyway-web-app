@@ -4,13 +4,17 @@ import authService from './AuthService';
 const API_URL = 'http://localhost:8080';
 
 class AdminService {
-  async getAllUsers() {
+  async getAllUsers(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
       throw new Error('User must be authenticated');
     }
 
-    const response = await fetch(`${API_URL}/admin/user/get-all`, {
+    const params = new URLSearchParams();
+    if (page !== undefined && page !== null) params.append('page', page);
+    if (size !== undefined && size !== null) params.append('size', size);
+
+    const response = await fetch(`${API_URL}/admin/user/get-all?${params.toString()}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -36,7 +40,20 @@ class AdminService {
       throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    // Нормализуем ответ: поддерживаем как Page, так и простой массив (на случай изменений бэкенда)
+    if (Array.isArray(data)) {
+      return {
+        content: data,
+        totalPages: 1,
+        totalElements: data.length,
+        number: 0,
+        size: data.length,
+      };
+    }
+
+    return data;
   }
 
   async getUserById(id) {
@@ -186,6 +203,41 @@ class AdminService {
     }
 
     return true;
+  }
+
+  async getStatistics() {
+    const token = authService.getToken();
+    if (!token) {
+      throw new Error('User must be authenticated');
+    }
+
+    const response = await fetch(`${API_URL}/admin/statistics`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'omit',
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'Failed to fetch statistics';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (e) {
+        if (response.status === 401) {
+          errorMessage = 'Ошибка авторизации (401) при загрузке статистики.';
+        } else if (response.status === 403) {
+          errorMessage = 'Доступ к статистике запрещен (403).';
+        } else {
+          errorMessage = `Failed to fetch statistics: ${response.status} ${response.statusText}`;
+        }
+      }
+      throw new Error(errorMessage);
+    }
+
+    return await response.json();
   }
 }
 

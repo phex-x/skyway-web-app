@@ -8,12 +8,17 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [newRole, setNewRole] = useState('USER');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    loadUsers(currentPage, pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, pageSize]);
 
-  const loadUsers = async () => {
+  const loadUsers = async (page, size) => {
     try {
       setLoading(true);
       setError('');
@@ -23,10 +28,16 @@ const UserManagement = () => {
         setError('Токен не найден. Пожалуйста, войдите снова.');
         return;
       }
-      
+
       console.log('UserManagement: Loading users, token exists:', !!token);
-      const data = await adminService.getAllUsers();
-      setUsers(data);
+      const pageData = await adminService.getAllUsers(page, size);
+
+      setUsers(pageData.content || []);
+      setTotalPages(pageData.totalPages ?? 0);
+      setTotalElements(pageData.totalElements ?? (pageData.content ? pageData.content.length : 0));
+      if (typeof pageData.number === 'number') {
+        setCurrentPage(pageData.number);
+      }
     } catch (err) {
       console.error('UserManagement: Error loading users:', err);
       if (err.message.includes('401')) {
@@ -45,7 +56,7 @@ const UserManagement = () => {
     }
     try {
       await adminService.deleteUser(id);
-      loadUsers();
+      loadUsers(currentPage, pageSize);
       alert('Пользователь успешно удален');
     } catch (err) {
       alert(`Ошибка: ${err.message}`);
@@ -58,7 +69,7 @@ const UserManagement = () => {
     }
     try {
       await adminService.disableUser(id);
-      loadUsers();
+      loadUsers(currentPage, pageSize);
       alert('Пользователь отключен');
     } catch (err) {
       alert(`Ошибка: ${err.message}`);
@@ -68,7 +79,7 @@ const UserManagement = () => {
   const handleEnable = async (id) => {
     try {
       await adminService.enableUser(id);
-      loadUsers();
+      loadUsers(currentPage, pageSize);
       alert('Пользователь включен');
     } catch (err) {
       alert(`Ошибка: ${err.message}`);
@@ -294,6 +305,35 @@ const UserManagement = () => {
     modalCancelButton: {
       backgroundColor: '#666',
       color: '#fff'
+    },
+    paginationContainer: {
+      marginTop: '20px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      gap: '10px',
+      fontSize: '14px'
+    },
+    paginationButtons: {
+      display: 'flex',
+      gap: '8px',
+      alignItems: 'center'
+    },
+    paginationButton: {
+      padding: '6px 12px',
+      borderRadius: '4px',
+      border: 'none',
+      cursor: 'pointer',
+      backgroundColor: '#004758',
+      color: '#fff',
+      fontSize: '13px',
+      fontWeight: 'bold',
+      minWidth: '90px'
+    },
+    paginationButtonDisabled: {
+      opacity: 0.5,
+      cursor: 'default'
     }
   };
 
@@ -395,6 +435,43 @@ const UserManagement = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div style={styles.paginationContainer}>
+        <div>
+          Страница {totalPages > 0 ? currentPage + 1 : 0} из {totalPages}{' '}
+          {totalElements !== undefined && (
+            <span style={{ color: '#555' }}> (всего пользователей: {totalElements})</span>
+          )}
+        </div>
+        <div style={styles.paginationButtons}>
+          <button
+            style={{
+              ...styles.paginationButton,
+              ...(currentPage === 0 || loading ? styles.paginationButtonDisabled : {})
+            }}
+            disabled={currentPage === 0 || loading}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+          >
+            Предыдущая
+          </button>
+          <button
+            style={{
+              ...styles.paginationButton,
+              ...(currentPage >= totalPages - 1 || loading || totalPages === 0
+                ? styles.paginationButtonDisabled
+                : {})
+            }}
+            disabled={currentPage >= totalPages - 1 || loading || totalPages === 0}
+            onClick={() =>
+              setCurrentPage((prev) =>
+                totalPages > 0 ? Math.min(prev + 1, totalPages - 1) : prev
+              )
+            }
+          >
+            Следующая
+          </button>
+        </div>
       </div>
 
       {showRoleModal && selectedUser && (

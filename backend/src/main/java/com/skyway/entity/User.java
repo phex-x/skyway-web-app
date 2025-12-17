@@ -115,7 +115,6 @@ public class User implements UserDetails {
     public LocalDateTime getUpdatedAt() {return this.updatedAt;}
     public Role getRole() {return this.role;}
     public Boolean getIsEnabled() {return this.isEnabled;}
-    public String getHashedPassword(String password) {return this.hashedPassword;}
     public List<Passenger> getPassengers() {return this.passengers;}
     public List<Booking> getBookings() {return this.bookings;}
 

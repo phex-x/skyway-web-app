@@ -3,10 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import FlightSearchTab from '../components/FlightSearchTab';
 import ManageBookingTab from '../components/ManageBookingTab';
-import FlightStatusTab from '../components/FlightStatusTab';
 import tagIcon from '../assets/images/бирка.png';
-import clockIcon from '../assets/images/часы.png';
-import airplaneIcon from '../assets/images/самолет.png'
+import airplaneIcon from '../assets/images/самолет.png';
+import { getGreetingByTime } from '../services/HelloService';
 
 const HomePage = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -113,16 +112,18 @@ const HomePage = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
-      paddingBottom: 0
+      paddingBottom: 100
     },
     searchPanel: {
       position: 'relative',
-      width: '95%',
+      width: '88%',
+      maxWidth: '1250px',
       margin: '0 auto',
       backgroundColor: '#fff',
-      borderRadius: '8px 8px 0 0',
+      borderRadius: '12px 12px',
+      marginBottom: '100px',
       padding: '0',
-      boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
+      boxShadow: '0 -4px 24px rgba(0,0,0,0.3)',
       display: 'flex',
       flexDirection: 'column'
     },
@@ -130,21 +131,24 @@ const HomePage = () => {
       display: 'flex',
       borderBottom: '1px solid #e0e0e0',
       padding: '0 20px',
-      height: '25%',
-      minHeight: '50px',
+      minHeight: '64px',
       boxSizing: 'border-box',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '0'
     },
     tab: {
       display: 'flex',
       alignItems: 'center',
-      gap: '8px',
-      padding: '15px 20px',
+      justifyContent: 'center',
+      flex: 1,
+      gap: '10px',
+      padding: '20px 28px',
       backgroundColor: 'transparent',
       border: 'none',
       borderBottom: '3px solid transparent',
       cursor: 'pointer',
-      fontSize: '14px',
+      fontSize: '16px',
       fontWeight: '500',
       color: '#666',
       transition: 'all 0.3s'
@@ -154,14 +158,13 @@ const HomePage = () => {
       borderBottomColor: '#B79C72'
     },
     tabIcon: {
-      width: '18px',
-      height: '18px',
+      width: '22px',
+      height: '22px',
       objectFit: 'contain'
     },
     tabContent: {
-      padding: '0',
-      height: '75%',
-      minHeight: '150px',
+      padding: '20px',
+      minHeight: '200px',
       boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column'
@@ -174,6 +177,24 @@ const HomePage = () => {
     userName: {
       color: '#fff',
       fontSize: '14px'
+    },
+    roleButtonsContainer: {
+      display: 'flex',
+      gap: '10px',
+      alignItems: 'center'
+    },
+    roleButton: {
+      padding: '6px 12px',
+      borderRadius: '4px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '12px',
+      fontWeight: 'bold',
+      color: '#fff',
+      backgroundColor: '#B79C72'
+    },
+    staffButton: {
+      backgroundColor: '#ff9800'
     }
   };
 
@@ -219,13 +240,33 @@ const HomePage = () => {
             >
               НАПРАВЛЕНИЯ
             </a>
-            <a href="#" style={styles.navLink}>ОБ АВТОРЕ</a>
+            <a href="/about" style={styles.navLink}>ОБ АВТОРЕ</a>
           </nav>
         </div>
         <div style={styles.userInfo}>
           {isAuthenticated && user ? (
             <>
-              <span style={styles.userName}>{user.firstName} {user.lastName}</span>
+              <span style={styles.userName}>
+                {getGreetingByTime()}, {user.firstName} {user.lastName}
+              </span>
+              <div style={styles.roleButtonsContainer}>
+                {user.role === 'ADMIN' && (
+                  <button
+                    style={styles.roleButton}
+                    onClick={() => navigate('/admin-panel')}
+                  >
+                    Панель администратора
+                  </button>
+                )}
+                {user.role === 'STAFF' && (
+                  <button
+                    style={{ ...styles.roleButton, ...styles.staffButton }}
+                    onClick={() => navigate('/staff-panel')}
+                  >
+                    Панель персонала
+                  </button>
+                )}
+              </div>
               <button 
                 onClick={() => navigate('/profile')} 
                 style={styles.loginButton}
@@ -270,21 +311,10 @@ const HomePage = () => {
               <img src={tagIcon} alt="Manage" style={styles.tabIcon} />
               <span>Управление бронированием</span>
             </button>
-            <button
-              style={{
-                ...styles.tab,
-                ...(activeTab === 'status' ? styles.tabActive : {})
-              }}
-              onClick={() => setActiveTab('status')}
-            >
-              <img src={clockIcon} alt="Status" style={styles.tabIcon} />
-              <span>Статус рейса</span>
-            </button>
           </div>
           <div style={styles.tabContent}>
             {activeTab === 'search' && <FlightSearchTab />}
             {activeTab === 'manage' && <ManageBookingTab />}
-            {activeTab === 'status' && <FlightStatusTab />}
           </div>
         </div>
       </div>

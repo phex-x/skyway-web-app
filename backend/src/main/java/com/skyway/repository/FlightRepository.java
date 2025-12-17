@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
@@ -36,4 +37,14 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     boolean existsByFlightNumber(String flightNumber);
     Page<Flight> findAll(Pageable pageable);
+
+    @Query(value = """
+    SELECT ROUND(
+        AVG(EXTRACT(EPOCH FROM (f.scheduled_arrival - f.scheduled_departure)) / 60)::numeric, 
+        2
+    )
+    FROM flights f
+    WHERE f.scheduled_arrival > f.scheduled_departure
+    """, nativeQuery = true)
+    Double findAverageFlightTime();
 }
