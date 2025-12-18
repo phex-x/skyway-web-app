@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { searchCities, formatCityDisplay, isValidCity, getCityByName, cities } from '../utils/cities';
+import { searchCities, formatCityDisplay, isValidCity, getCityByName, cities } from '../../utils/cities';
 
 const CityAutocomplete = ({ value, onChange, placeholder, label, required = false }) => {
   const [inputValue, setInputValue] = useState(value || '');

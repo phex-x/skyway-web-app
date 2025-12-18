@@ -1,6 +1,6 @@
 // src/components/staff/BookingManagement.jsx
 import React, { useState, useEffect } from 'react';
-import staffService from '../../services/StaffService';
+import staffService from '../../../services/StaffService';
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState([]);

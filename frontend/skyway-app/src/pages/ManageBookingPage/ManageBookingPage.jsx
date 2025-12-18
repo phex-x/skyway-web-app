@@ -1,7 +1,7 @@
 // src/pages/ManageBookingPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import bookingService from '../services/BookingService';
+import bookingService from '../../services/BookingService';
 
 const ManageBookingPage = () => {
   const navigate = useNavigate();

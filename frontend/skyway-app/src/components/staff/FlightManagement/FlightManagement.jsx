@@ -1,6 +1,6 @@
 // src/components/staff/FlightManagement.jsx
 import React, { useState, useEffect } from 'react';
-import staffService from '../../services/StaffService';
+import staffService from '../../../services/StaffService';
 
 const FlightManagement = () => {
   const [flights, setFlights] = useState([]);

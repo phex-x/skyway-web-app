@@ -133,7 +133,7 @@ class BookingService {
       return cleaned;
     });
 
-    // Используем ManageBooking DTO
+    // Используем ManageBookingTab DTO
     const requestBody = {
       oneWayFLightResponse: cleanedFlight,
       passengers: cleanedPassengers

@@ -1,11 +1,11 @@
 // src/pages/StaffPanelPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext/AuthContext';
-import AirplaneManagement from '../components/staff/AIrplaneManagement/AirplaneManagement';
-import AirportManagement from '../components/staff/AirportManagement/AirportManagement';
-import FlightManagement from '../components/staff/FlightManagement/FlightManagement';
-import BookingManagement from '../components/staff/BookingManagement/BookingManagement';
+import { useAuth } from '../../context/AuthContext/AuthContext';
+import AirplaneManagement from '../../components/staff/AIrplaneManagement/AirplaneManagement';
+import AirportManagement from '../../components/staff/AirportManagement/AirportManagement';
+import FlightManagement from '../../components/staff/FlightManagement/FlightManagement';
+import BookingManagement from '../../components/staff/BookingManagement/BookingManagement';
 
 const StaffPanelPage = () => {
   const navigate = useNavigate();

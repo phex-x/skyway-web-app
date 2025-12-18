@@ -1,10 +1,10 @@
 // src/pages/AdminPanelPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext/AuthContext';
-import UserManagement from '../components/admin/UserManagement/UserManagement';
-import AdminStatistics from '../components/admin/Statistics/Statistics';
-import adminService from '../services/AdminService';
+import { useAuth } from '../../context/AuthContext/AuthContext';
+import UserManagement from '../../components/admin/UserManagement/UserManagement';
+import AdminStatistics from '../../components/admin/Statistics/Statistics';
+import adminService from '../../services/AdminService';
 
 const AdminPanelPage = () => {
   const navigate = useNavigate();

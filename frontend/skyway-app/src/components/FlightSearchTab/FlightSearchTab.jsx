@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CityAutocomplete from './CityAutocomplete';
-import { cities } from '../utils/cities';
+import CityAutocomplete from '../CityAutocomplete/CityAutocomplete';
+import { cities } from '../../utils/cities';
 
 const FlightSearchTab = () => {
   const navigate = useNavigate();

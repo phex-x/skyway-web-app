@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import adminService from '../../services/AdminService';
+import adminService from '../../../services/AdminService';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
