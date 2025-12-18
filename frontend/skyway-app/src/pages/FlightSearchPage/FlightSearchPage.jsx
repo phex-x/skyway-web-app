@@ -1,7 +1,7 @@
 // src/pages/FlightSearchPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import FlightList from '../components/FlightList';
+import FlightList from '../components/FlightList/FlightList';
 
 const FlightSearchPage = () => {
   const navigate = useNavigate();

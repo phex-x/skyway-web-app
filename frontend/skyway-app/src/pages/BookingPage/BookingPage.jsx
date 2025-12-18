@@ -1,7 +1,7 @@
 // src/pages/BookingPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext/AuthContext';
 import bookingService from '../services/BookingService';
 import passengerService from '../services/PassengerService';
 

@@ -1,7 +1,7 @@
 // src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext/AuthContext';
 import bookingService from '../services/BookingService';
 import authService from '../services/AuthService';
 

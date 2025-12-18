@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext/AuthContext';
 import { useState } from 'react';
-import FlightSearchTab from '../components/FlightSearchTab';
-import ManageBookingTab from '../components/ManageBookingTab';
+import FlightSearchTab from '../components/FlightSearchTab/FlightSearchTab';
+import ManageBookingTab from '../components/ManageBookingTab/ManageBookingTab';
 import tagIcon from '../assets/images/бирка.png';
 import airplaneIcon from '../assets/images/самолет.png';
 import { getGreetingByTime } from '../services/HelloService';
