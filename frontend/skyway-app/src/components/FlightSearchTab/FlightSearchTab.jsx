@@ -24,13 +24,42 @@ const FlightSearchTab = () => {
   const savedData = loadSavedData();
   const stateData = location.state;
 
-  const [departure, setDeparture] = useState(stateData?.departure || savedData?.departure || '');
-  const [arrival, setArrival] = useState(stateData?.arrival || savedData?.arrival || '');
-  const [tripType, setTripType] = useState(stateData?.tripType || savedData?.tripType || 'one-way');
-  const [departureDate, setDepartureDate] = useState(stateData?.departureDate || savedData?.departureDate || '');
-  const [returnDate, setReturnDate] = useState(stateData?.returnDate || savedData?.returnDate || '');
-  const [seatClass, setSeatClass] = useState(stateData?.seatClass || savedData?.seatClass || 'ECONOMY');
-  const [passengerCount, setPassengerCount] = useState(stateData?.passengerCount || savedData?.passengerCount || 1);
+  // Приоритет: stateData (новый поиск) > savedData (сохраненные данные) > значения по умолчанию
+  const [departure, setDeparture] = useState(() => {
+    if (stateData?.departure) return stateData.departure;
+    if (savedData?.departure) return savedData.departure;
+    return '';
+  });
+  const [arrival, setArrival] = useState(() => {
+    if (stateData?.arrival) return stateData.arrival;
+    if (savedData?.arrival) return savedData.arrival;
+    return '';
+  });
+  const [tripType, setTripType] = useState(() => {
+    if (stateData?.tripType) return stateData.tripType;
+    if (savedData?.tripType) return savedData.tripType;
+    return 'one-way';
+  });
+  const [departureDate, setDepartureDate] = useState(() => {
+    if (stateData?.departureDate) return stateData.departureDate;
+    if (savedData?.departureDate) return savedData.departureDate;
+    return '';
+  });
+  const [returnDate, setReturnDate] = useState(() => {
+    if (stateData?.returnDate) return stateData.returnDate;
+    if (savedData?.returnDate) return savedData.returnDate;
+    return '';
+  });
+  const [seatClass, setSeatClass] = useState(() => {
+    if (stateData?.seatClass) return stateData.seatClass;
+    if (savedData?.seatClass) return savedData.seatClass;
+    return 'ECONOMY';
+  });
+  const [passengerCount, setPassengerCount] = useState(() => {
+    if (stateData?.passengerCount) return stateData.passengerCount;
+    if (savedData?.passengerCount) return savedData.passengerCount;
+    return 1;
+  });
 
   // Сохраняем данные в localStorage при изменении
   useEffect(() => {
@@ -80,17 +109,22 @@ const FlightSearchTab = () => {
       return;
     }
     
+    // Сохраняем данные перед переходом
+    const searchData = {
+      departure: departure, // Уже только название города
+      arrival: arrival, // Уже только название города
+      tripType,
+      departureDate,
+      returnDate: tripType === 'round-trip' ? returnDate : null,
+      seatClass,
+      passengerCount
+    };
+    
+    localStorage.setItem('flightSearchData', JSON.stringify(searchData));
+    
     // Отправляем только название города
     navigate('/flights', {
-      state: {
-        departure: departure, // Уже только название города
-        arrival: arrival, // Уже только название города
-        tripType,
-        departureDate,
-        returnDate: tripType === 'round-trip' ? returnDate : null,
-        seatClass,
-        passengerCount
-      }
+      state: searchData
     });
   };
 

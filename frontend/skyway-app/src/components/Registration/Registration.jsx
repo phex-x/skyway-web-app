@@ -35,8 +35,53 @@ const Registration = () => {
     'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
   ];
 
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const currentDay = new Date().getDate();
+  
+  // Получаем доступные дни в зависимости от выбранного месяца и года
+  const getAvailableDays = () => {
+    const maxDay = 31;
+    let days = Array.from({ length: maxDay }, (_, i) => i + 1);
+    
+    // Если выбран текущий год и текущий месяц, ограничиваем дни
+    if (formData.birthYear && parseInt(formData.birthYear) === currentYear) {
+      if (formData.birthMonth && parseInt(formData.birthMonth) === currentMonth) {
+        days = days.filter(day => day <= currentDay);
+      }
+    }
+    
+    // Учитываем количество дней в месяце
+    if (formData.birthMonth) {
+      const month = parseInt(formData.birthMonth);
+      const daysInMonth = new Date(
+        formData.birthYear ? parseInt(formData.birthYear) : currentYear,
+        month,
+        0
+      ).getDate();
+      days = days.filter(day => day <= daysInMonth);
+    }
+    
+    return days;
+  };
+  
+  // Получаем доступные месяцы в зависимости от выбранного года
+  const getAvailableMonths = () => {
+    let availableMonths = months.map((month, index) => ({ name: month, value: index + 1 }));
+    
+    // Если выбран текущий год, ограничиваем месяцы
+    if (formData.birthYear && parseInt(formData.birthYear) === currentYear) {
+      availableMonths = availableMonths.filter(month => month.value <= currentMonth);
+    }
+    
+    return availableMonths;
+  };
+  
+  // Генерируем годы (максимум - текущий год)
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+  
+  const days = getAvailableDays();
+  const availableMonths = getAvailableMonths();
 
   const validatePassword = (password) => {
     const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]*$/;
@@ -269,12 +314,25 @@ const Registration = () => {
                       <select
                         name="birthMonth"
                         value={formData.birthMonth}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          // Сбрасываем день, если он стал недоступен
+                          if (formData.birthDay) {
+                            const maxDay = new Date(
+                              formData.birthYear ? parseInt(formData.birthYear) : currentYear,
+                              parseInt(e.target.value),
+                              0
+                            ).getDate();
+                            if (parseInt(formData.birthDay) > maxDay) {
+                              setFormData(prev => ({ ...prev, birthDay: '' }));
+                            }
+                          }
+                        }}
                         className={styles.select}
                       >
                         <option value="">Месяц</option>
-                        {months.map((month, index) => (
-                          <option key={index + 1} value={index + 1}>{month}</option>
+                        {availableMonths.map((month) => (
+                          <option key={month.value} value={month.value}>{month.name}</option>
                         ))}
                       </select>
                     </div>
@@ -282,7 +340,19 @@ const Registration = () => {
                       <select
                         name="birthYear"
                         value={formData.birthYear}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          // Если выбран текущий год, проверяем месяц и день
+                          if (parseInt(e.target.value) === currentYear) {
+                            if (formData.birthMonth && parseInt(formData.birthMonth) > currentMonth) {
+                              setFormData(prev => ({ ...prev, birthMonth: '', birthDay: '' }));
+                            } else if (formData.birthMonth && parseInt(formData.birthMonth) === currentMonth) {
+                              if (formData.birthDay && parseInt(formData.birthDay) > currentDay) {
+                                setFormData(prev => ({ ...prev, birthDay: '' }));
+                              }
+                            }
+                          }
+                        }}
                         className={styles.select}
                       >
                         <option value="">Год</option>
