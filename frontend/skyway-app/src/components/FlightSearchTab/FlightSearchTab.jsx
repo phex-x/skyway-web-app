@@ -142,32 +142,41 @@ const FlightSearchTab = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <div className={styles.radioContainer}>
-        <div className={styles.radioGroup}>
-          <label className={styles.radioLabel}>
-            <input
-              type="radio"
-              name="tripType"
-              value="one-way"
-              checked={tripType === 'one-way'}
-              onChange={(e) => setTripType(e.target.value)}
-              className={styles.radioInput}
-            />
-            В одну сторону
-          </label>
-          <label className={styles.radioLabel}>
-            <input
-              type="radio"
-              name="tripType"
-              value="round-trip"
-              checked={tripType === 'round-trip'}
-              onChange={(e) => setTripType(e.target.value)}
-              className={styles.radioInput}
-            />
-            Туда-обратно
-          </label>
+        <div className={styles.radioContainer}>
+            <div className={styles.tripTypeSelector}>
+                <button
+                    type="button"
+                    className={`${styles.tripTypeButton} ${tripType === 'one-way' ? styles.active : ''}`}
+                    onClick={() => setTripType('one-way')}
+                >
+                    <input
+                        type="radio"
+                        name="tripType"
+                        value="one-way"
+                        checked={tripType === 'one-way'}
+                        onChange={() => {}}
+                        className={styles.radioHidden}
+                    />
+                    <span>В одну сторону</span>
+                </button>
+
+                <button
+                    type="button"
+                    className={`${styles.tripTypeButton} ${tripType === 'round-trip' ? styles.active : ''}`}
+                    onClick={() => setTripType('round-trip')}
+                >
+                    <input
+                        type="radio"
+                        name="tripType"
+                        value="round-trip"
+                        checked={tripType === 'round-trip'}
+                        onChange={() => {}}
+                        className={styles.radioHidden}
+                    />
+                    <span>Туда-обратно</span>
+                </button>
+            </div>
         </div>
-      </div>
       <div className={styles.inputGroup}>
         <CityAutocomplete
           value={departure}

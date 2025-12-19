@@ -1,0 +1,244 @@
+.container {
+    width: 100%;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Table */
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.th {
+    background-color: #004758;
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+}
+
+.tdCenter {
+    text-align: center;
+    color: #666;
+}
+
+/* Status */
+.status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.statusEnabled {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.statusDisabled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Role badge */
+.roleBadge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    color: #fff;
+}
+
+.roleAdmin {
+    background-color: #d32f2f;
+}
+
+.roleStaff {
+    background-color: #ff9800;
+}
+
+.roleUser {
+    background-color: #1976d2;
+}
+
+/* Buttons */
+.buttonGroup {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.changeRoleButton {
+    background-color: #004758;
+}
+
+.enableButton {
+    background-color: #4caf50;
+}
+
+.disableButton {
+    background-color: #ff9800;
+}
+
+.deleteButton {
+    background-color: #d32f2f;
+}
+
+/* Loading & Error */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.error {
+    background-color: #ffebee;
+    color: #d32f2f;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+/* Pagination */
+.paginationContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.paginationInfo {
+    color: #555;
+}
+
+.paginationButtons {
+    display: flex;
+    gap: 8px;
+}
+
+.paginationButton {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: #004758;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 90px;
+}
+
+.paginationButtonDisabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.modalTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.modalFormGroup {
+    margin-bottom: 20px;
+}
+
+.modalLabel {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modalSelect {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modalButtonGroup {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modalButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.modalSubmitButton {
+    background-color: #004758;
+}
+
+.modalCancelButton {
+    background-color: #666;
+}

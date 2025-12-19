@@ -1,9 +1,10 @@
 import React from 'react';
+import styles from './Statistics.module.css';
 
 const AdminStatistics = ({ statistics }) => {
     if (!statistics) return null;
 
-    // Поддерживаем оба варианта кейса полей с бэкенда (totalUsers / TotalUsers и т.п.)
+    // Поддерживаем оба варианта кейса полей с бэкенда
     const totalUsers = statistics.totalUsers ?? statistics.TotalUsers ?? 0;
     const totalAirports = statistics.totalAirports ?? statistics.TotalAirports ?? 0;
     const totalFlights = statistics.totalFlights ?? statistics.TotalFlights ?? 0;
@@ -12,60 +13,35 @@ const AdminStatistics = ({ statistics }) => {
         statistics.averageFlightDurationMinutes ??
         statistics.AverageFlightDurationMinutes ??
         0;
+
     const avgFlightDuration = Number(avgFlightDurationRaw) || 0;
 
-    const containerStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '30px'
-    };
-
-    const cardStyle = {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        textAlign: 'center'
-    };
-
-    const valueStyle = {
-        fontSize: '28px',
-        fontWeight: 'bold',
-        marginTop: '10px'
-    };
-
-    const gridStyle = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '20px'
-    };
-
     return (
-        <div style={containerStyle}>
-            <div style={gridStyle}>
-                <div style={cardStyle}>
+        <div className={styles.container}>
+            <div className={styles.grid}>
+                <div className={styles.card}>
                     Всего пользователей
-                    <div style={valueStyle}>{totalUsers}</div>
+                    <div className={styles.value}>{totalUsers}</div>
                 </div>
 
-                <div style={cardStyle}>
+                <div className={styles.card}>
                     Аэропортов
-                    <div style={valueStyle}>{totalAirports}</div>
+                    <div className={styles.value}>{totalAirports}</div>
                 </div>
 
-                <div style={cardStyle}>
+                <div className={styles.card}>
                     Рейсов
-                    <div style={valueStyle}>{totalFlights}</div>
+                    <div className={styles.value}>{totalFlights}</div>
                 </div>
 
-                <div style={cardStyle}>
+                <div className={styles.card}>
                     Самолётов
-                    <div style={valueStyle}>{totalAirplanes}</div>
+                    <div className={styles.value}>{totalAirplanes}</div>
                 </div>
 
-                <div style={cardStyle}>
+                <div className={styles.card}>
                     Среднее время полёта (мин)
-                    <div style={valueStyle}>
+                    <div className={styles.value}>
                         {avgFlightDuration.toFixed(1)}
                     </div>
                 </div>
