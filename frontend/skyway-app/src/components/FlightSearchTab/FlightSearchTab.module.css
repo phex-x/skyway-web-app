@@ -1,0 +1,103 @@
+.formContainer {
+  background-color: #f5f5f5;
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.inputGroup {
+  flex: 1;
+  min-width: 150px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select:hover {
+  border-color: #B79C72;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #B79C72;
+  box-shadow: 0 0 0 2px rgba(183, 156, 114, 0.2);
+}
+
+.searchButton {
+  padding: 12px 30px;
+  background-color: #B79C72;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+  background-color: #9a8259;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.radioInput {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.radioContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
