@@ -1,0 +1,88 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.inputGroup {
+  flex: 1;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.inputInvalid {
+  border-color: #d32f2f;
+  background-color: #ffebee;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: -1px;
+}
+
+.suggestion {
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.suggestion:hover {
+  background-color: #f5f5f5;
+}
+
+.suggestionText {
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 2px;
+}
+
+.suggestionSubtext {
+  font-size: 12px;
+  color: #666;
+}
+
+.errorMessage {
+  font-size: 12px;
+  color: #d32f2f;
+  margin-top: 4px;
+}
+
+.hubBadge {
+  display: inline-block;
+  background-color: #004758;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+  font-weight: bold;
+}
+

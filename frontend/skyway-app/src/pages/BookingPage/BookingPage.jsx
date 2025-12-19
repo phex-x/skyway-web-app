@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/AuthContext';
 import bookingService from '../../services/BookingService';
 import passengerService from '../../services/PassengerService';
+import styles from './BookingPage.module.css';
 
 const BookingPage = () => {
   const navigate = useNavigate();
@@ -239,140 +240,30 @@ const BookingPage = () => {
     }
   };
 
-  const styles = {
-    page: {
-      minHeight: '100vh',
-      backgroundColor: '#ececec',
-      fontFamily: 'Arial, sans-serif',
-      padding: '40px 20px'
-    },
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '30px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-    },
-    title: {
-      fontSize: '24px',
-      fontWeight: 'bold',
-      color: '#000',
-      marginBottom: '20px'
-    },
-    section: {
-      marginBottom: '30px',
-      paddingBottom: '20px',
-      borderBottom: '1px solid #e0e0e0'
-    },
-    sectionTitle: {
-      fontSize: '18px',
-      fontWeight: 'bold',
-      color: '#000',
-      marginBottom: '15px'
-    },
-    flightInfo: {
-      backgroundColor: '#f5f5f5',
-      padding: '15px',
-      borderRadius: '4px',
-      marginBottom: '10px'
-    },
-    passengerCard: {
-      border: '1px solid #ddd',
-      borderRadius: '4px',
-      padding: '15px',
-      marginBottom: '15px',
-      display: 'flex',
-      gap: '15px',
-      alignItems: 'flex-start'
-    },
-    checkbox: {
-      marginTop: '5px'
-    },
-    formGroup: {
-      flex: 1,
-      marginBottom: '15px'
-    },
-    label: {
-      display: 'block',
-      marginBottom: '5px',
-      fontSize: '14px',
-      color: '#333',
-      fontWeight: '500'
-    },
-    input: {
-      width: '100%',
-      padding: '10px',
-      fontSize: '14px',
-      border: '1px solid #ddd',
-      borderRadius: '4px',
-      boxSizing: 'border-box'
-    },
-    button: {
-      padding: '12px 30px',
-      backgroundColor: '#B79C72',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '16px',
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      marginRight: '10px'
-    },
-    addButton: {
-      padding: '10px 20px',
-      backgroundColor: '#004758',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '14px',
-      cursor: 'pointer',
-      marginBottom: '20px'
-    },
-    removeButton: {
-      padding: '5px 10px',
-      backgroundColor: '#d32f2f',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '12px',
-      cursor: 'pointer'
-    },
-    backButton: {
-      padding: '10px 20px',
-      backgroundColor: '#004758',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      marginBottom: '20px',
-      fontSize: '14px'
-    }
-  };
 
   if (!bookingData) {
     return (
-      <div style={styles.page}>
-        <div style={styles.container}>
-          <div style={styles.title}>Данные бронирования не найдены</div>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.title}>Данные бронирования не найдены</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <button style={styles.backButton} onClick={() => navigate('/')}>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <button className={styles.backButton} onClick={() => navigate('/')}>
           ← Назад на главную
         </button>
 
-        <div style={styles.title}>Бронирование рейса</div>
+        <div className={styles.title}>Бронирование рейса</div>
 
-        <div style={styles.section}>
-          <div style={styles.sectionTitle}>Информация о рейсе</div>
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Информация о рейсе</div>
           {bookingData.outboundFlight && (
-            <div style={styles.flightInfo}>
+            <div className={styles.flightInfo}>
               <strong>Рейс туда:</strong> {bookingData.outboundFlight.flightNumber} 
               {' '} {bookingData.outboundFlight.departureAirport?.city || bookingData.outboundFlight.departureAirport?.name || 'N/A'} 
               → {bookingData.outboundFlight.arrivalAirport?.city || bookingData.outboundFlight.arrivalAirport?.name || 'N/A'}
@@ -381,7 +272,7 @@ const BookingPage = () => {
             </div>
           )}
           {bookingData.returnFlight && (
-            <div style={styles.flightInfo}>
+            <div className={styles.flightInfo}>
               <strong>Рейс обратно:</strong> {bookingData.returnFlight.flightNumber}
               {' '} {bookingData.returnFlight.departureAirport?.city || bookingData.returnFlight.departureAirport?.name || 'N/A'} 
               → {bookingData.returnFlight.arrivalAirport?.city || bookingData.returnFlight.arrivalAirport?.name || 'N/A'}
@@ -391,86 +282,86 @@ const BookingPage = () => {
           )}
         </div>
 
-        <div style={styles.section}>
-          <div style={styles.sectionTitle}>Пассажиры</div>
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Пассажиры</div>
           {loading && passengers.length === 0 && (
-            <div style={{ color: '#666', marginBottom: '20px' }}>Загрузка пассажиров...</div>
+            <div className={styles.loadingText}>Загрузка пассажиров...</div>
           )}
-          <button style={styles.addButton} onClick={handleAddPassenger} disabled={loading}>
+          <button className={styles.addButton} onClick={handleAddPassenger} disabled={loading}>
             + Добавить пассажира
           </button>
 
           {passengers.map(passenger => (
-            <div key={passenger.id} style={styles.passengerCard}>
+            <div key={passenger.id} className={styles.passengerCard}>
               <input
                 type="checkbox"
                 checked={selectedPassengers.includes(passenger.id)}
                 onChange={() => handleTogglePassenger(passenger.id)}
-                style={styles.checkbox}
+                className={styles.checkbox}
               />
-              <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Имя *</label>
+              <div className={styles.passengerFormRow}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Имя *</label>
                   <input
                     type="text"
                     value={passenger.firstName}
                     onChange={(e) => handlePassengerChange(passenger.id, 'firstName', e.target.value)}
-                    style={styles.input}
+                    className={styles.input}
                     required
                     disabled={passenger.isExisting}
                   />
                 </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Фамилия *</label>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Фамилия *</label>
                   <input
                     type="text"
                     value={passenger.lastName}
                     onChange={(e) => handlePassengerChange(passenger.id, 'lastName', e.target.value)}
-                    style={styles.input}
+                    className={styles.input}
                     required
                     disabled={passenger.isExisting}
                   />
                 </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Номер паспорта *</label>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Номер паспорта *</label>
                   <input
                     type="text"
                     value={passenger.passportNumber}
                     onChange={(e) => handlePassengerChange(passenger.id, 'passportNumber', e.target.value)}
-                    style={styles.input}
+                    className={styles.input}
                     required
                     disabled={passenger.isExisting}
                   />
                 </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Гражданство *</label>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Гражданство *</label>
                   <input
                     type="text"
                     value={passenger.citizenship}
                     onChange={(e) => handlePassengerChange(passenger.id, 'citizenship', e.target.value)}
-                    style={styles.input}
+                    className={styles.input}
                     required
                     disabled={passenger.isExisting}
                   />
                 </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Дата рождения *</label>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Дата рождения *</label>
                   <input
                     type="date"
                     value={passenger.birthday}
                     onChange={(e) => handlePassengerChange(passenger.id, 'birthday', e.target.value)}
-                    style={styles.input}
+                    className={styles.input}
                     required
                     max={new Date().toISOString().split('T')[0]}
                     disabled={passenger.isExisting}
                   />
                 </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Пол *</label>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Пол *</label>
                   <select
                     value={passenger.gender}
                     onChange={(e) => handlePassengerChange(passenger.id, 'gender', e.target.value)}
-                    style={styles.input}
+                    className={styles.input}
                     required
                     disabled={passenger.isExisting}
                   >
@@ -481,7 +372,7 @@ const BookingPage = () => {
               </div>
               {!passenger.isExisting && (
                 <button
-                  style={styles.removeButton}
+                  className={styles.removeButton}
                   onClick={() => handleRemovePassenger(passenger.id)}
                 >
                   Удалить
@@ -491,15 +382,15 @@ const BookingPage = () => {
           ))}
 
           {passengers.length === 0 && (
-            <div style={{ color: '#666', marginTop: '10px' }}>
+            <div className={styles.emptyText}>
               Добавьте хотя бы одного пассажира
             </div>
           )}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '30px' }}>
+        <div className={styles.buttonContainer}>
           <button
-            style={styles.button}
+            className={styles.button}
             onClick={handleSubmit}
             disabled={selectedPassengers.length === 0 || loading}
           >

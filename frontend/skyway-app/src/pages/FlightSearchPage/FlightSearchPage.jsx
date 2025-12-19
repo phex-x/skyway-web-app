@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FlightList from '../../components/FlightList/FlightList';
+import styles from './FlightSearchPage.module.css';
 
 const FlightSearchPage = () => {
   const navigate = useNavigate();
@@ -52,80 +53,40 @@ const FlightSearchPage = () => {
     }
   };
 
-  const styles = {
-    page: {
-      minHeight: '100vh',
-      backgroundColor: '#ececec',
-      fontFamily: 'Arial, sans-serif',
-      padding: '40px 20px'
-    },
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '30px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-    },
-    title: {
-      fontSize: '24px',
-      fontWeight: 'bold',
-      color: '#000',
-      marginBottom: '20px'
-    },
-    stepIndicator: {
-      fontSize: '16px',
-      color: '#666',
-      marginBottom: '20px',
-      padding: '10px',
-      backgroundColor: '#f5f5f5',
-      borderRadius: '4px'
-    },
-    backButton: {
-      padding: '10px 20px',
-      backgroundColor: '#004758',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      marginBottom: '20px',
-      fontSize: '14px'
-    }
-  };
 
   if (!searchParams) {
     return (
-      <div style={styles.page}>
-        <div style={styles.container}>
-          <button style={styles.backButton} onClick={() => navigate('/')}>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <button className={styles.backButton} onClick={() => navigate('/')}>
             ← Назад на главную
           </button>
-          <div style={styles.title}>Параметры поиска не найдены</div>
+          <div className={styles.title}>Параметры поиска не найдены</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <button style={styles.backButton} onClick={() => navigate('/')}>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <button className={styles.backButton} onClick={() => navigate('/')}>
           ← Назад на главную
         </button>
         
         {tripType === 'round-trip' && selectedOutboundFlight && (
-          <div style={styles.stepIndicator}>
+          <div className={styles.stepIndicator}>
             Рейс туда выбран. Выберите рейс обратно.
           </div>
         )}
         
         {tripType === 'round-trip' && !selectedOutboundFlight && (
-          <div style={styles.stepIndicator}>
+          <div className={styles.stepIndicator}>
             Выберите рейс туда.
           </div>
         )}
 
-        <div style={styles.title}>
+        <div className={styles.title}>
           {tripType === 'round-trip' && selectedOutboundFlight
             ? 'Рейсы обратно'
             : tripType === 'round-trip'

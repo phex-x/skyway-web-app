@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { searchCities, formatCityDisplay, isValidCity, getCityByName, cities } from '../../utils/cities';
+import styles from './CityAutocomplete.module.css';
 
 const CityAutocomplete = ({ value, onChange, placeholder, label, required = false }) => {
   const [inputValue, setInputValue] = useState(value || '');
@@ -109,89 +110,11 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
     }
   };
 
-  const styles = {
-    container: {
-      position: 'relative',
-      width: '100%'
-    },
-    inputGroup: {
-      flex: 1
-    },
-    label: {
-      display: 'block',
-      marginBottom: '8px',
-      fontSize: '14px',
-      color: '#333',
-      fontWeight: '500'
-    },
-    input: {
-      width: '100%',
-      padding: '12px',
-      fontSize: '16px',
-      border: `1px solid ${isValid ? '#000' : '#d32f2f'}`,
-      borderRadius: '4px',
-      boxSizing: 'border-box',
-      backgroundColor: '#fff'
-    },
-    inputInvalid: {
-      borderColor: '#d32f2f',
-      backgroundColor: '#ffebee'
-    },
-    dropdown: {
-      position: 'absolute',
-      top: '100%',
-      left: 0,
-      right: 0,
-      backgroundColor: '#fff',
-      border: '1px solid #ddd',
-      borderTop: 'none',
-      borderRadius: '0 0 4px 4px',
-      maxHeight: '300px',
-      overflowY: 'auto',
-      zIndex: 10000,
-      boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-      marginTop: '-1px'
-    },
-    suggestion: {
-      padding: '12px',
-      cursor: 'pointer',
-      borderBottom: '1px solid #f0f0f0',
-      fontSize: '14px',
-      transition: 'background-color 0.2s'
-    },
-    suggestionHover: {
-      backgroundColor: '#f5f5f5'
-    },
-    suggestionText: {
-      fontWeight: '500',
-      color: '#000',
-      marginBottom: '2px'
-    },
-    suggestionSubtext: {
-      fontSize: '12px',
-      color: '#666'
-    },
-    errorMessage: {
-      fontSize: '12px',
-      color: '#d32f2f',
-      marginTop: '4px'
-    },
-    hubBadge: {
-      display: 'inline-block',
-      backgroundColor: '#004758',
-      color: '#fff',
-      fontSize: '10px',
-      padding: '2px 6px',
-      borderRadius: '3px',
-      marginLeft: '8px',
-      fontWeight: 'bold'
-    }
-  };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.inputGroup}>
-        {label && <label style={styles.label}>{label}</label>}
+    <div className={styles.container}>
+      <div className={styles.inputGroup}>
+        {label && <label className={styles.label}>{label}</label>}
         <input
           ref={inputRef}
           type="text"
@@ -200,31 +123,25 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           placeholder={placeholder}
+          className={`${styles.input} ${!isValid && inputValue.trim() !== '' ? styles.inputInvalid : ''}`}
           style={{
-            ...styles.input,
-            ...(!isValid && inputValue.trim() !== '' ? styles.inputInvalid : {})
+            borderColor: isValid ? '#000' : '#d32f2f'
           }}
           required={required}
         />
         {showSuggestions && suggestions.length > 0 && (
-          <div ref={dropdownRef} style={styles.dropdown}>
+          <div ref={dropdownRef} className={styles.dropdown}>
             {suggestions.map((city, index) => (
               <div
                 key={`${city.city}-${city.country}-${index}`}
-                style={styles.suggestion}
+                className={styles.suggestion}
                 onClick={() => handleSuggestionClick(city)}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = styles.suggestionHover.backgroundColor;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#fff';
-                }}
               >
-                <div style={styles.suggestionText}>
+                <div className={styles.suggestionText}>
                   {city.city}, {city.country}
-                  {city.hub && <span style={styles.hubBadge}>ХАБ</span>}
+                  {city.hub && <span className={styles.hubBadge}>ХАБ</span>}
                 </div>
-                <div style={styles.suggestionSubtext}>
+                <div className={styles.suggestionSubtext}>
                   Аэропорт: {city.airport}
                 </div>
               </div>
@@ -232,7 +149,7 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
           </div>
         )}
         {!isValid && inputValue.trim() !== '' && (
-          <div style={styles.errorMessage}>
+          <div className={styles.errorMessage}>
             Выберите город из списка
           </div>
         )}

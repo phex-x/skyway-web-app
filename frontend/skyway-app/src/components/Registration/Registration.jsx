@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/AuthContext';
+import styles from './Registration.module.css';
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -163,221 +164,100 @@ const Registration = () => {
     }
   };
 
-  const styles = {
-    page: {
-      minHeight: '100vh',
-      backgroundColor: '#ececec',
-      fontFamily: 'Arial, sans-serif',
-      margin: 0,
-      padding: 0
-    },
-    header: {
-      backgroundColor: '#004758',
-      padding: '20px 40px',
-      display: 'flex',
-      alignItems: 'center'
-    },
-    logo: {
-      backgroundColor: '#B79C72',
-      color: '#004758',
-      padding: '10px 20px',
-      fontWeight: 'bold',
-      fontSize: '18px',
-      letterSpacing: '1px'
-    },
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '40px 20px'
-    },
-    title: {
-      textAlign: 'center',
-      fontSize: '24px',
-      fontWeight: 'normal',
-      color: '#000',
-      marginBottom: '5px'
-    },
-    titleBold: {
-      textAlign: 'center',
-      fontSize: '32px',
-      fontWeight: 'bold',
-      color: '#000',
-      marginBottom: '40px'
-    },
-    formContainer: {
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '40px',
-      maxWidth: '900px',
-      margin: '0 auto',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-    },
-    formRow: {
-      display: 'flex',
-      gap: '20px',
-      marginBottom: '20px'
-    },
-    formCol: {
-      flex: 1
-    },
-    formGroup: {
-      marginBottom: '20px'
-    },
-    label: {
-      display: 'block',
-      marginBottom: '8px',
-      fontSize: '14px',
-      color: '#333',
-      fontWeight: '500'
-    },
-    input: {
-      width: '100%',
-      padding: '12px',
-      fontSize: '16px',
-      border: '1px solid #000',
-      borderRadius: '4px',
-      boxSizing: 'border-box'
-    },
-    select: {
-      width: '100%',
-      padding: '12px',
-      fontSize: '16px',
-      border: '1px solid #000',
-      borderRadius: '4px',
-      boxSizing: 'border-box',
-      backgroundColor: '#fff'
-    },
-    dateRow: {
-      display: 'flex',
-      gap: '10px'
-    },
-    dateField: {
-      flex: 1
-    },
-    error: {
-      color: '#d32f2f',
-      fontSize: '12px',
-      marginTop: '4px'
-    },
-    registerButton: {
-      width: '100%',
-      padding: '14px',
-      backgroundColor: '#B79C72',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '6px',
-      fontSize: '16px',
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      marginTop: '20px'
-    },
-    registerButtonDisabled: {
-      backgroundColor: '#ccc',
-      cursor: 'not-allowed'
-    },
-    generalError: {
-      backgroundColor: '#ffebee',
-      color: '#d32f2f',
-      padding: '12px',
-      borderRadius: '4px',
-      marginBottom: '20px',
-      fontSize: '14px'
-    }
-  };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div style={styles.logo}>SKYWAY AIRLINES</div>
+    <div className={styles.page}>
+      <div className={styles.header}>
+        <div className={styles.logo}>SKYWAY AIRLINES</div>
       </div>
       
-      <div style={styles.container}>
-        <h1 style={styles.title}>Стать участником программы</h1>
-        <h2 style={styles.titleBold}>SKYWAY SKYWARDS</h2>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Стать участником программы</h1>
+        <h2 className={styles.titleBold}>SKYWAY SKYWARDS</h2>
 
-        <div style={styles.formContainer}>
+        <div className={styles.formContainer}>
           {errors.general && (
-            <div style={styles.generalError}>
+            <div className={styles.generalError}>
               {errors.general}
             </div>
           )}
 
           <form onSubmit={handleSubmit}>
-            <div style={styles.formRow}>
-              <div style={styles.formCol}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Адрес электронной почты</label>
+            <div className={styles.formRow}>
+              <div className={styles.formCol}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Адрес электронной почты</label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    style={styles.input}
+                    className={styles.input}
                     required
                   />
-                  {errors.email && <div style={styles.error}>{errors.email}</div>}
+                  {errors.email && <div className={styles.error}>{errors.email}</div>}
                 </div>
               </div>
 
-              <div style={styles.formCol}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Номер мобильного телефона</label>
+              <div className={styles.formCol}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Номер мобильного телефона</label>
                   <input
                     type="tel"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
-                    style={styles.input}
+                    className={styles.input}
                     required
                   />
-                  {errors.phoneNumber && <div style={styles.error}>{errors.phoneNumber}</div>}
+                  {errors.phoneNumber && <div className={styles.error}>{errors.phoneNumber}</div>}
                 </div>
               </div>
             </div>
 
-            <div style={styles.formRow}>
-              <div style={styles.formCol}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Имя (латиницей)</label>
+            <div className={styles.formRow}>
+              <div className={styles.formCol}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Имя (латиницей)</label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    style={styles.input}
+                    className={styles.input}
                     required
                   />
-                  {errors.firstName && <div style={styles.error}>{errors.firstName}</div>}
+                  {errors.firstName && <div className={styles.error}>{errors.firstName}</div>}
                 </div>
               </div>
 
-              <div style={styles.formCol}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Фамилия (латиницей)</label>
+              <div className={styles.formCol}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Фамилия (латиницей)</label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    style={styles.input}
+                    className={styles.input}
                     required
                   />
-                  {errors.lastName && <div style={styles.error}>{errors.lastName}</div>}
+                  {errors.lastName && <div className={styles.error}>{errors.lastName}</div>}
                 </div>
               </div>
             </div>
 
-            <div style={styles.formRow}>
-              <div style={styles.formCol}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Дата рождения</label>
-                  <div style={styles.dateRow}>
-                    <div style={styles.dateField}>
+            <div className={styles.formRow}>
+              <div className={styles.formCol}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Дата рождения</label>
+                  <div className={styles.dateRow}>
+                    <div className={styles.dateField}>
                       <select
                         name="birthDay"
                         value={formData.birthDay}
                         onChange={handleChange}
-                        style={styles.select}
+                        className={styles.select}
                       >
                         <option value="">День</option>
                         {days.map(day => (
@@ -385,12 +265,12 @@ const Registration = () => {
                         ))}
                       </select>
                     </div>
-                    <div style={styles.dateField}>
+                    <div className={styles.dateField}>
                       <select
                         name="birthMonth"
                         value={formData.birthMonth}
                         onChange={handleChange}
-                        style={styles.select}
+                        className={styles.select}
                       >
                         <option value="">Месяц</option>
                         {months.map((month, index) => (
@@ -398,12 +278,12 @@ const Registration = () => {
                         ))}
                       </select>
                     </div>
-                    <div style={styles.dateField}>
+                    <div className={styles.dateField}>
                       <select
                         name="birthYear"
                         value={formData.birthYear}
                         onChange={handleChange}
-                        style={styles.select}
+                        className={styles.select}
                       >
                         <option value="">Год</option>
                         {years.map(year => (
@@ -412,18 +292,18 @@ const Registration = () => {
                       </select>
                     </div>
                   </div>
-                  {errors.birthDate && <div style={styles.error}>{errors.birthDate}</div>}
+                  {errors.birthDate && <div className={styles.error}>{errors.birthDate}</div>}
                 </div>
               </div>
 
-              <div style={styles.formCol}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Страна / территория проживания</label>
+              <div className={styles.formCol}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Страна / территория проживания</label>
                   <select
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    style={styles.select}
+                    className={styles.select}
                     required
                   >
                     <option value="">Выберите страну</option>
@@ -433,46 +313,43 @@ const Registration = () => {
                       </option>
                     ))}
                   </select>
-                  {errors.country && <div style={styles.error}>{errors.country}</div>}
+                  {errors.country && <div className={styles.error}>{errors.country}</div>}
                 </div>
               </div>
             </div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Пароль</label>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Пароль</label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                style={styles.input}
+                className={styles.input}
                 required
               />
-              {errors.password && <div style={styles.error}>{errors.password}</div>}
+              {errors.password && <div className={styles.error}>{errors.password}</div>}
             </div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Подтверждение пароля</label>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Подтверждение пароля</label>
               <input
                 type="password"
                 name="passwordConfirmation"
                 value={formData.passwordConfirmation}
                 onChange={handleChange}
-                style={styles.input}
+                className={styles.input}
                 required
               />
               {errors.passwordConfirmation && (
-                <div style={styles.error}>{errors.passwordConfirmation}</div>
+                <div className={styles.error}>{errors.passwordConfirmation}</div>
               )}
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              style={{
-                ...styles.registerButton,
-                ...(isSubmitting ? styles.registerButtonDisabled : {})
-              }}
+              className={`${styles.registerButton} ${isSubmitting ? styles.registerButtonDisabled : ''}`}
             >
               {isSubmitting ? 'Регистрация...' : 'Зарегистрироваться'}
             </button>

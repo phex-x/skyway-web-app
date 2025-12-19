@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cities } from '../../utils/cities';
+import styles from './DestinationsPage.module.css';
 
 const DestinationsPage = () => {
   const navigate = useNavigate();
@@ -64,145 +65,25 @@ const DestinationsPage = () => {
     return cityImages[cityName] || null;
   };
 
-  const styles = {
-    page: {
-      minHeight: '100vh',
-      backgroundColor: '#ececec',
-      fontFamily: 'Arial, sans-serif',
-      padding: '40px 20px'
-    },
-    container: {
-      maxWidth: '1400px',
-      margin: '0 auto'
-    },
-    header: {
-      marginBottom: '40px',
-      textAlign: 'center'
-    },
-    title: {
-      fontSize: '36px',
-      fontWeight: 'bold',
-      color: '#004758',
-      marginBottom: '10px'
-    },
-    subtitle: {
-      fontSize: '18px',
-      color: '#666',
-      marginBottom: '30px'
-    },
-    backButton: {
-      padding: '10px 20px',
-      backgroundColor: '#004758',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      marginBottom: '30px',
-      fontSize: '14px',
-      fontWeight: 'bold',
-      transition: 'background-color 0.3s'
-    },
-    citiesGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: '30px',
-      marginBottom: '40px'
-    },
-    cityCard: {
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      transition: 'transform 0.3s, box-shadow 0.3s',
-      cursor: 'pointer',
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    cityCardHover: {
-      transform: 'translateY(-5px)',
-      boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
-    },
-    cityImageContainer: {
-      width: '100%',
-      height: '250px',
-      overflow: 'hidden',
-      position: 'relative',
-      backgroundColor: '#f0f0f0'
-    },
-    cityImage: {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      transition: 'transform 0.3s'
-    },
-    cityImageHover: {
-      transform: 'scale(1.05)'
-    },
-    cityInfo: {
-      padding: '20px',
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    cityName: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      color: '#004758',
-      marginBottom: '5px'
-    },
-    cityCountry: {
-      fontSize: '14px',
-      color: '#666',
-      marginBottom: '15px'
-    },
-    cityDescription: {
-      fontSize: '14px',
-      color: '#333',
-      lineHeight: '1.6',
-      flex: 1
-    },
-    hubBadge: {
-      display: 'inline-block',
-      backgroundColor: '#B79C72',
-      color: '#fff',
-      fontSize: '10px',
-      padding: '4px 8px',
-      borderRadius: '4px',
-      marginLeft: '10px',
-      fontWeight: 'bold'
-    },
-    errorImage: {
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#e0e0e0',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: '#999',
-      fontSize: '14px'
-    }
-  };
 
   const [hoveredCard, setHoveredCard] = React.useState(null);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
+    <div className={styles.page}>
+      <div className={styles.container}>
         <button 
-          style={styles.backButton}
+          className={styles.backButton}
           onClick={() => navigate('/')}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#003344'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#004758'}
         >
           ← Назад на главную
         </button>
 
-        <div style={styles.header}>
-          <h1 style={styles.title}>Направления</h1>
-          <p style={styles.subtitle}>Откройте для себя удивительные города мира</p>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Направления</h1>
+          <p className={styles.subtitle}>Откройте для себя удивительные города мира</p>
         </div>
 
-        <div style={styles.citiesGrid}>
+        <div className={styles.citiesGrid}>
           {cities.map((city, index) => {
             const imagePath = getCityImagePath(city.city);
             const isHovered = hoveredCard === index;
@@ -210,10 +91,7 @@ const DestinationsPage = () => {
             return (
               <div
                 key={`${city.city}-${city.country}-${index}`}
-                style={{
-                  ...styles.cityCard,
-                  ...(isHovered ? styles.cityCardHover : {})
-                }}
+                className={`${styles.cityCard} ${isHovered ? styles.cityCardHover : ''}`}
                 onMouseEnter={() => setHoveredCard(index)}
                 onMouseLeave={() => setHoveredCard(null)}
                 onClick={() => {
@@ -221,15 +99,12 @@ const DestinationsPage = () => {
                   navigate('/');
                 }}
               >
-                <div style={styles.cityImageContainer}>
+                <div className={styles.cityImageContainer}>
                   {imagePath ? (
                     <img
                       src={imagePath}
                       alt={`${city.city}, ${city.country}`}
-                      style={{
-                        ...styles.cityImage,
-                        ...(isHovered ? styles.cityImageHover : {})
-                      }}
+                      className={`${styles.cityImage} ${isHovered ? styles.cityImageHover : ''}`}
                       onError={(e) => {
                         // Если изображение не загрузилось, показываем placeholder
                         e.target.style.display = 'none';
@@ -254,30 +129,20 @@ const DestinationsPage = () => {
                       }}
                     />
                   ) : (
-                    <div style={styles.errorImage}>
-                      <div style={{
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        fontSize: '24px',
-                        fontWeight: 'bold'
-                      }}>
+                    <div className={styles.errorImage}>
+                      <div className={styles.errorImagePlaceholder}>
                         {city.city.charAt(0)}
                       </div>
                     </div>
                   )}
                 </div>
-                <div style={styles.cityInfo}>
-                  <div style={styles.cityName}>
+                <div className={styles.cityInfo}>
+                  <div className={styles.cityName}>
                     {city.city}
-                    {city.hub && <span style={styles.hubBadge}>ХАБ</span>}
+                    {city.hub && <span className={styles.hubBadge}>ХАБ</span>}
                   </div>
-                  <div style={styles.cityCountry}>{city.country}</div>
-                  <div style={styles.cityDescription}>{city.description}</div>
+                  <div className={styles.cityCountry}>{city.country}</div>
+                  <div className={styles.cityDescription}>{city.description}</div>
                 </div>
               </div>
             );

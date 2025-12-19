@@ -30,16 +30,15 @@
 
 .title {
   text-align: center;
-  font-size: 24px;
-  font-weight: normal;
-  color: #000;
-  margin-bottom: 5px;
-}
-
-.titleBold {
-  text-align: center;
   font-size: 32px;
   font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 16px;
   color: #000;
   margin-bottom: 40px;
 }
@@ -48,19 +47,29 @@
   background-color: #fff;
   border-radius: 8px;
   padding: 40px;
+  display: flex;
+  gap: 40px;
   max-width: 900px;
   margin: 0 auto;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.formRow {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+.divider {
+  width: 1px;
+  background-color: #e0e0e0;
 }
 
-.formCol {
+.leftSection {
   flex: 1;
+}
+
+.rightSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .formGroup {
@@ -84,32 +93,13 @@
   box-sizing: border-box;
 }
 
-.select {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #000;
-  border-radius: 4px;
-  box-sizing: border-box;
-  background-color: #fff;
-}
-
-.dateRow {
-  display: flex;
-  gap: 10px;
-}
-
-.dateField {
-  flex: 1;
-}
-
 .error {
   color: #d32f2f;
   font-size: 12px;
   margin-top: 4px;
 }
 
-.registerButton {
+.loginButton {
   width: 100%;
   padding: 14px;
   background-color: #B79C72;
@@ -119,12 +109,31 @@
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
-.registerButtonDisabled {
+.loginButtonDisabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.registerPrompt {
+  font-size: 16px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.registerButton {
+  padding: 14px 30px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .generalError {

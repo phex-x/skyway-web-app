@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import bookingService from '../../services/BookingService';
+import styles from './ManageBookingPage.module.css';
 
 const ManageBookingPage = () => {
   const navigate = useNavigate();
@@ -51,141 +52,48 @@ const ManageBookingPage = () => {
     }
   };
 
-  const styles = {
-    page: {
-      minHeight: '100vh',
-      backgroundColor: '#ececec',
-      fontFamily: 'Arial, sans-serif',
-      padding: '40px 20px'
-    },
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '30px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-    },
-    title: {
-      fontSize: '24px',
-      fontWeight: 'bold',
-      color: '#000',
-      marginBottom: '20px'
-    },
-    form: {
-      display: 'flex',
-      gap: '15px',
-      marginBottom: '30px',
-      alignItems: 'flex-end'
-    },
-    formGroup: {
-      flex: 1
-    },
-    label: {
-      display: 'block',
-      marginBottom: '8px',
-      fontSize: '14px',
-      color: '#333',
-      fontWeight: '500'
-    },
-    input: {
-      width: '100%',
-      padding: '12px',
-      fontSize: '16px',
-      border: '1px solid #000',
-      borderRadius: '4px',
-      boxSizing: 'border-box'
-    },
-    button: {
-      padding: '12px 30px',
-      backgroundColor: '#B79C72',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '16px',
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      whiteSpace: 'nowrap'
-    },
-    backButton: {
-      padding: '10px 20px',
-      backgroundColor: '#004758',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      marginBottom: '20px',
-      fontSize: '14px'
-    },
-    bookingInfo: {
-      backgroundColor: '#f5f5f5',
-      padding: '20px',
-      borderRadius: '4px',
-      marginTop: '20px'
-    },
-    cancelButton: {
-      padding: '10px 24px',
-      backgroundColor: '#d32f2f',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '14px',
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      marginTop: '15px'
-    },
-    error: {
-      color: '#d32f2f',
-      marginTop: '10px'
-    },
-    loading: {
-      textAlign: 'center',
-      padding: '20px',
-      color: '#666'
-    }
-  };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <button style={styles.backButton} onClick={() => navigate('/')}>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <button className={styles.backButton} onClick={() => navigate('/')}>
           ← Назад на главную
         </button>
 
-        <div style={styles.title}>Управление бронированием</div>
+        <div className={styles.title}>Управление бронированием</div>
 
-        <form onSubmit={handleSearch} style={styles.form}>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Фамилия</label>
+        <form onSubmit={handleSearch} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Фамилия</label>
             <input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              style={styles.input}
+              className={styles.input}
               required
             />
           </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Код бронирования</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Код бронирования</label>
             <input
               type="text"
               value={bookingCode}
               onChange={(e) => setBookingCode(e.target.value)}
-              style={styles.input}
+              className={styles.input}
               required
             />
           </div>
-          <button type="submit" style={styles.button} disabled={loading}>
+          <button type="submit" className={styles.button} disabled={loading}>
             {loading ? 'Поиск...' : 'Управление бронированием'}
           </button>
         </form>
 
-        {error && <div style={styles.error}>{error}</div>}
+        {error && <div className={styles.error}>{error}</div>}
 
-        {loading && <div style={styles.loading}>Поиск бронирования...</div>}
+        {loading && <div className={styles.loading}>Поиск бронирования...</div>}
 
         {booking && (
-          <div style={styles.bookingInfo}>
+          <div className={styles.bookingInfo}>
             <h3>Информация о бронировании</h3>
             <p><strong>Код бронирования:</strong> {booking.bookingReference || booking.id}</p>
             <p><strong>Статус:</strong> {
@@ -222,7 +130,7 @@ const ManageBookingPage = () => {
               <div style={{ marginTop: '15px' }}>
                 <strong>Пассажиры:</strong>
                 {booking.passengers.map((p, idx) => (
-                  <div key={idx} style={{ marginLeft: '20px', marginTop: '5px' }}>
+                  <div key={idx} className={styles.passengerItem}>
                     {p.firstName} {p.lastName}
                     {p.email && ` (${p.email})`}
                   </div>
@@ -234,7 +142,7 @@ const ManageBookingPage = () => {
              new Date(booking.flight.scheduledDeparture) > new Date() && (
               <button
                 type="button"
-                style={styles.cancelButton}
+                className={styles.cancelButton}
                 onClick={handleCancelBooking}
               >
                 Отменить бронирование
