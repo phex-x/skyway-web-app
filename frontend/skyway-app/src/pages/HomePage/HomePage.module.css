@@ -1,3 +1,7 @@
+
+* {
+    margin: 0;
+}
 .page {
   min-height: 100vh;
   background-color: #1a1a2e;

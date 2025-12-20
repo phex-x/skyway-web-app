@@ -103,7 +103,7 @@ const AboutAuthorPage = () => {
                         </ul>
                     </div>
                     <div style={styles.row}>
-                        <span style={styles.label}>Сроки выполнения проекта:</span> 17.11.2025 - 15.12.2025
+                        <span style={styles.label}>Сроки выполнения проекта:</span> 17.11.2025 - 20.12.2025
                     </div>
                 </div>
             </div>
