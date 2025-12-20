@@ -1,4 +1,3 @@
-// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/AuthContext';
@@ -23,8 +22,7 @@ const ProfilePage = () => {
 
       try {
         setLoading(true);
-        
-        // Загружаем детальную информацию о пользователе
+
         const token = authService.getToken();
         const userResponse = await fetch('http://localhost:8080/auth/me', {
           method: 'GET',
@@ -40,11 +38,9 @@ const ProfilePage = () => {
           setUserDetails(userData);
         }
 
-        // Загружаем бронирования пользователя
         try {
           const bookingsData = await bookingService.getMyBookings();
-          
-          // Если это Page объект, извлекаем content
+
           let bookingsList = [];
           if (Array.isArray(bookingsData)) {
             bookingsList = bookingsData;
@@ -77,9 +73,7 @@ const ProfilePage = () => {
 
     try {
       await bookingService.cancelBooking(bookingId);
-      // Обновляем список бронирований
       const updatedBookingsData = await bookingService.getMyBookings();
-      // Если это Page объект, извлекаем content
       let updatedBookingsList = [];
       if (Array.isArray(updatedBookingsData)) {
         updatedBookingsList = updatedBookingsData;
@@ -106,7 +100,6 @@ const ProfilePage = () => {
   const formatDateOnly = (dateString) => {
     if (!dateString) return 'N/A';
     try {
-      // Если это LocalDate (строка YYYY-MM-DD), парсим напрямую
       if (typeof dateString === 'string' && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
         const [year, month, day] = dateString.split('-');
         return `${day}.${month}.${year}`;

@@ -6,7 +6,6 @@ import styles from './DestinationsPage.module.css';
 const DestinationsPage = () => {
   const navigate = useNavigate();
 
-  // Импортируем все изображения городов
   const cityImages = {
     'Москва': require('../../assets/images/cities/Москва.webp'),
     'Санкт-Петербург': require('../../assets/images/cities/Санкт-Петербург.webp'),
@@ -60,7 +59,6 @@ const DestinationsPage = () => {
     'Мельбурн': require('../../assets/images/cities/Мельбурн.jpg')
   };
 
-  // Функция для получения пути к изображению города
   const getCityImagePath = (cityName) => {
     return cityImages[cityName] || null;
   };
@@ -95,7 +93,6 @@ const DestinationsPage = () => {
                 onMouseEnter={() => setHoveredCard(index)}
                 onMouseLeave={() => setHoveredCard(null)}
                 onClick={() => {
-                  // Переход на главную страницу
                   navigate('/');
                 }}
               >
@@ -106,7 +103,6 @@ const DestinationsPage = () => {
                       alt={`${city.city}, ${city.country}`}
                       className={`${styles.cityImage} ${isHovered ? styles.cityImageHover : ''}`}
                       onError={(e) => {
-                        // Если изображение не загрузилось, показываем placeholder
                         e.target.style.display = 'none';
                         const container = e.target.parentElement;
                         if (!container.querySelector('.error-placeholder')) {

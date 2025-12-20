@@ -1,4 +1,3 @@
-// src/components/staff/AirportManagement.jsx
 import React, { useState, useEffect } from 'react';
 import staffService from '../../../services/StaffService';
 import styles from './AirportManagement.module.css';

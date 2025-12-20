@@ -1,4 +1,3 @@
-// src/components/staff/AirplaneManagement.jsx
 import React, { useState, useEffect } from 'react';
 import staffService from '../../../services/StaffService';
 import styles from './AirplaneManagement.module.css';
@@ -29,17 +28,14 @@ const AirplaneManagement = () => {
       const data = await staffService.getAllAirplanes(currentPage, pageSize);
       console.log('AirplaneManagement: Loaded airplanes:', data);
       console.log('AirplaneManagement: totalPages:', data?.totalPages, 'totalElements:', data?.totalElements);
-      
-      // Если это Page объект, извлекаем content
+
       if (data && typeof data === 'object') {
         if ('content' in data) {
-          // Это Page объект от Spring
           const content = Array.isArray(data.content) ? data.content : [];
           setAirplanes(content);
           setTotalPages(data.totalPages ?? 0);
           setTotalElements(data.totalElements ?? 0);
         } else if (Array.isArray(data)) {
-          // Если это массив напрямую (старый формат)
           setAirplanes(data);
           setTotalPages(1);
           setTotalElements(data.length || 0);

@@ -1,4 +1,3 @@
-// src/pages/ManageBookingPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import bookingService from '../../services/BookingService';
@@ -39,7 +38,6 @@ const ManageBookingPage = () => {
     
     try {
       await bookingService.cancelBooking(booking.id);
-      // Обновляем статус локально, чтобы сразу отобразить результат
       setBooking({ ...booking, status: 'CANCELED' });
       alert('Бронирование успешно отменено');
     } catch (error) {

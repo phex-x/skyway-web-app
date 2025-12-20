@@ -1,4 +1,3 @@
-// src/components/staff/FlightManagement.jsx
 import React, { useState, useEffect } from 'react';
 import staffService from '../../../services/StaffService';
 import styles from './FlightManagement.module.css';
@@ -61,23 +60,19 @@ const FlightManagement = () => {
       console.log('FlightManagement: Has content?', flightsData && 'content' in flightsData);
       console.log('FlightManagement: totalPages:', flightsData?.totalPages);
       console.log('FlightManagement: totalElements:', flightsData?.totalElements);
-      
-      // Если это Page объект, извлекаем content
+
       if (flightsData && typeof flightsData === 'object') {
         if ('content' in flightsData) {
-          // Это Page объект от Spring
           const content = Array.isArray(flightsData.content) ? flightsData.content : [];
           setFlights(content);
           setTotalPages(flightsData.totalPages ?? 0);
           setTotalElements(flightsData.totalElements ?? 0);
           console.log('FlightManagement: Set flights:', content.length, 'totalPages:', flightsData.totalPages, 'totalElements:', flightsData.totalElements);
         } else if (Array.isArray(flightsData)) {
-          // Если это массив напрямую (старый формат)
           setFlights(flightsData);
           setTotalPages(1);
           setTotalElements(flightsData.length || 0);
         } else {
-          // Если данные в другом формате
           console.warn('FlightManagement: Unexpected data format:', flightsData);
           setFlights([]);
           setTotalPages(0);
@@ -112,7 +107,6 @@ const FlightManagement = () => {
         return;
       }
 
-      // Форматируем дату для Java LocalDateTime (формат: YYYY-MM-DDTHH:mm)
       const formatDateTime = (dateTimeString) => {
         if (!dateTimeString) return null;
         // Если уже в правильном формате, возвращаем как есть
@@ -162,7 +156,6 @@ const FlightManagement = () => {
     }
     try {
       await staffService.deleteFlight(id);
-      // Удаляем рейс из локального состояния, чтобы сразу обновить таблицу
       setFlights((prevFlights) => prevFlights.filter((flight) => flight.id !== id));
       setTotalElements((prevTotal) => (prevTotal > 0 ? prevTotal - 1 : 0));
       alert('Рейс успешно удален');

@@ -24,7 +24,6 @@ const FlightSearchTab = () => {
   const savedData = loadSavedData();
   const stateData = location.state;
 
-  // Приоритет: stateData (новый поиск) > savedData (сохраненные данные) > значения по умолчанию
   const [departure, setDeparture] = useState(() => {
     if (stateData?.departure) return stateData.departure;
     if (savedData?.departure) return savedData.departure;
@@ -61,7 +60,6 @@ const FlightSearchTab = () => {
     return 1;
   });
 
-  // Сохраняем данные в localStorage при изменении
   useEffect(() => {
     const searchData = {
       departure,
@@ -83,9 +81,7 @@ const FlightSearchTab = () => {
       alert('Заполните все обязательные поля');
       return;
     }
-    
-    // departure и arrival уже содержат только названия городов (благодаря CityAutocomplete)
-    // Но проверяем, что они валидны
+
     const departureCity = cities.find(c => c.city === departure);
     const arrivalCity = cities.find(c => c.city === arrival);
     
@@ -108,11 +104,10 @@ const FlightSearchTab = () => {
       alert('Укажите дату возврата');
       return;
     }
-    
-    // Сохраняем данные перед переходом
+
     const searchData = {
-      departure: departure, // Уже только название города
-      arrival: arrival, // Уже только название города
+      departure: departure,
+      arrival: arrival,
       tripType,
       departureDate,
       returnDate: tripType === 'round-trip' ? returnDate : null,
@@ -128,11 +123,8 @@ const FlightSearchTab = () => {
     });
   };
 
-
-  // Получаем минимальную дату (сегодня)
   const today = new Date().toISOString().split('T')[0];
-  
-  // Получаем максимальную дату для даты возврата (не раньше даты вылета)
+
   const getMinReturnDate = () => {
     if (departureDate) {
       return departureDate;

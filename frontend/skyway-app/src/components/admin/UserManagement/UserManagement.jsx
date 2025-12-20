@@ -16,7 +16,6 @@ const UserManagement = () => {
 
     useEffect(() => {
         loadUsers(currentPage, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, pageSize]);
 
     const loadUsers = async (page, size) => {

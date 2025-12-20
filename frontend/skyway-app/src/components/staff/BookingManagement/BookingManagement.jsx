@@ -1,4 +1,3 @@
-// src/components/staff/BookingManagement.jsx
 import React, { useState, useEffect } from 'react';
 import staffService from '../../../services/StaffService';
 import styles from './BookingManagement.module.css';

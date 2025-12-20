@@ -1,10 +1,8 @@
-// src/services/StaffService.js
 import authService from './AuthService';
 
 const API_URL = 'http://localhost:8080';
 
 class StaffService {
-  // Airplane methods
   async getAllAirplanes(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
@@ -37,7 +35,6 @@ class StaffService {
 
     const data = await response.json();
     console.log('StaffService: getAllAirplanes response:', data);
-    // Возвращаем полный Page объект
     return data;
   }
 
@@ -102,8 +99,6 @@ class StaffService {
       throw new Error(errorMessage);
     }
 
-    // Бэкенд возвращает пустой ответ (ResponseEntity.ok().build())
-    // Проверяем, есть ли контент перед парсингом JSON
     const text = await response.text();
     if (text && text.trim()) {
       try {
@@ -145,7 +140,6 @@ class StaffService {
     return true;
   }
 
-  // Airport methods
   async getAllAirports(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
@@ -178,7 +172,6 @@ class StaffService {
 
     const data = await response.json();
     console.log('StaffService: getAllAirports response:', data);
-    // Возвращаем полный Page объект
     return data;
   }
 
@@ -275,7 +268,6 @@ class StaffService {
     return true;
   }
 
-  // Flight methods
   async getAllFlights(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
@@ -308,7 +300,6 @@ class StaffService {
 
     const data = await response.json();
     console.log('StaffService: getAllFlights response:', data);
-    // Возвращаем полный Page объект
     return data;
   }
 
@@ -368,7 +359,6 @@ class StaffService {
       throw new Error(errorMessage);
     }
 
-    // Безопасно парсим ответ, так как могут быть циклические ссылки
     const text = await response.text();
     if (text && text.trim()) {
       try {
@@ -388,7 +378,6 @@ class StaffService {
       throw new Error('User must be authenticated');
     }
 
-    // В бэкенде опечатка: /flught/delete вместо /flight/delete
     const response = await fetch(`${API_URL}/staff/flight/delete/${id}`, {
       method: 'DELETE',
       headers: {
@@ -421,8 +410,6 @@ class StaffService {
       throw new Error(errorMessage);
     }
 
-    // Бэкенд возвращает пустой ответ (ResponseEntity.ok().build())
-    // Проверяем статус ответа
     if (response.status === 200 || response.status === 204) {
       return true;
     }
@@ -430,7 +417,6 @@ class StaffService {
     return true;
   }
 
-  // Booking methods
   async getAllBookings(page = 0, size = 10) {
     const token = authService.getToken();
     if (!token) {
@@ -463,7 +449,6 @@ class StaffService {
 
     const data = await response.json();
     console.log('StaffService: getAllBookings response:', data);
-    // Возвращаем полный Page объект
     return data;
   }
 

@@ -1,4 +1,3 @@
-// src/pages/FlightSearchPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FlightList from '../../components/FlightList/FlightList';
@@ -21,7 +20,6 @@ const FlightSearchPage = () => {
 
   const handleFlightSelect = (flight) => {
     if (tripType === 'one-way') {
-      // Для рейса в одну сторону - сразу на страницу бронирования
       navigate('/booking', {
         state: {
           outboundFlight: flight,
@@ -29,9 +27,7 @@ const FlightSearchPage = () => {
         }
       });
     } else {
-      // Для туда-обратно
       if (!selectedOutboundFlight) {
-        // Сохраняем выбранный рейс туда и переходим к выбору обратного рейса
         navigate('/flights', {
           state: {
             ...searchParams,
@@ -41,7 +37,6 @@ const FlightSearchPage = () => {
           }
         });
       } else {
-        // Выбран обратный рейс - переходим на страницу бронирования
         navigate('/booking', {
           state: {
             outboundFlight: selectedOutboundFlight,

@@ -1,4 +1,3 @@
-// src/pages/BookingSearchPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FlightSearchTab from '../../components/FlightSearchTab/FlightSearchTab';

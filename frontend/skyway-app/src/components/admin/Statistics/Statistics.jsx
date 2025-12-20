@@ -4,7 +4,6 @@ import styles from './Statistics.module.css';
 const AdminStatistics = ({ statistics }) => {
     if (!statistics) return null;
 
-    // Поддерживаем оба варианта кейса полей с бэкенда
     const totalUsers = statistics.totalUsers ?? statistics.TotalUsers ?? 0;
     const totalAirports = statistics.totalAirports ?? statistics.TotalAirports ?? 0;
     const totalFlights = statistics.totalFlights ?? statistics.TotalFlights ?? 0;

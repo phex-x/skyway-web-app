@@ -1,4 +1,3 @@
-// src/components/FlightList.jsx
 import React, { useState, useEffect } from 'react';
 import flightService from '../../services/FlightService';
 import styles from './FlightList.module.css';

@@ -1,4 +1,3 @@
-// src/services/BookingService.js
 import authService from './AuthService';
 
 const API_URL = 'http://localhost:8080';
@@ -10,11 +9,10 @@ class BookingService {
       throw new Error('User must be authenticated to create booking');
     }
 
-    // Функция для глубокой очистки объекта от циклических ссылок и undefined значений
     const cleanObject = (obj, visited = new WeakSet()) => {
       if (obj === null || obj === undefined) return null;
       if (typeof obj !== 'object') return obj;
-      if (visited.has(obj)) return null; // Обнаружена циклическая ссылка
+      if (visited.has(obj)) return null;
       visited.add(obj);
 
       if (Array.isArray(obj)) {
@@ -25,9 +23,7 @@ class BookingService {
       for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
           const value = obj[key];
-          // Пропускаем функции и undefined
           if (typeof value === 'function' || value === undefined) continue;
-          // Рекурсивно очищаем вложенные объекты
           const cleanedValue = cleanObject(value, visited);
           if (cleanedValue !== undefined) {
             cleaned[key] = cleanedValue;
@@ -37,8 +33,6 @@ class BookingService {
       return cleaned;
     };
 
-    // Очищаем объект flight - создаем новый объект только с нужными полями
-    // Извлекаем значения напрямую, избегая любых циклических ссылок
     const cleanedFlight = {
       flightId: flight?.flightId ?? null,
       flightNumber: flight?.flightNumber ?? null,
@@ -48,14 +42,12 @@ class BookingService {
       seatClass: flight?.seatClass ?? null
     };
 
-    // Добавляем airplane только если он есть и извлекаем только нужные поля
     if (flight?.airplane) {
       cleanedFlight.airplane = {
         id: flight.airplane.id ?? null,
         model: flight.airplane.model ?? null,
         registrationNumber: flight.airplane.registrationNumber ?? null
       };
-      // Удаляем null значения
       Object.keys(cleanedFlight.airplane).forEach(key => {
         if (cleanedFlight.airplane[key] === null) {
           delete cleanedFlight.airplane[key];
@@ -66,7 +58,6 @@ class BookingService {
       }
     }
 
-    // Добавляем departureAirport
     if (flight?.departureAirport) {
       cleanedFlight.departureAirport = {
         id: flight.departureAirport.id ?? null,
@@ -86,7 +77,6 @@ class BookingService {
       }
     }
 
-    // Добавляем arrivalAirport
     if (flight?.arrivalAirport) {
       cleanedFlight.arrivalAirport = {
         id: flight.arrivalAirport.id ?? null,
@@ -106,14 +96,12 @@ class BookingService {
       }
     }
 
-    // Удаляем null значения из основного объекта
     Object.keys(cleanedFlight).forEach(key => {
       if (cleanedFlight[key] === null || cleanedFlight[key] === undefined) {
         delete cleanedFlight[key];
       }
     });
 
-    // Очищаем пассажиров - извлекаем только нужные поля, игнорируя все остальное
     const cleanedPassengers = passengers.map(passenger => {
       const cleaned = {
         id: passenger?.id || null,
@@ -124,7 +112,6 @@ class BookingService {
         dateOfBirth: passenger?.dateOfBirth || null,
         gender: passenger?.gender || null
       };
-      // Удаляем null значения для чистоты
       Object.keys(cleaned).forEach(key => {
         if (cleaned[key] === null || cleaned[key] === undefined) {
           delete cleaned[key];
@@ -133,17 +120,14 @@ class BookingService {
       return cleaned;
     });
 
-    // Используем ManageBookingTab DTO
     const requestBody = {
       oneWayFLightResponse: cleanedFlight,
       passengers: cleanedPassengers
     };
 
-    // Проверяем, что JSON можно сериализовать
     let requestBodyString;
     try {
       requestBodyString = JSON.stringify(requestBody, (key, value) => {
-        // Игнорируем функции и undefined
         if (typeof value === 'function' || value === undefined) {
           return null;
         }
@@ -153,8 +137,7 @@ class BookingService {
         }
         return value;
       });
-      
-      // Проверяем, что строка валидна
+
       JSON.parse(requestBodyString);
     } catch (error) {
       console.error('Error serializing request body:', error);
@@ -183,7 +166,6 @@ class BookingService {
             const errorData = JSON.parse(text);
             errorMessage = errorData.message || errorData.error || errorMessage;
           } catch (parseError) {
-            // Если ответ не JSON, используем текст ответа
             errorMessage = text || errorMessage;
           }
         }
@@ -193,14 +175,11 @@ class BookingService {
       throw new Error(errorMessage);
     }
 
-    // Бэкенд возвращает пустой ответ (ResponseEntity.ok().build())
-    // Проверяем, есть ли контент перед парсингом JSON
     const text = await response.text();
     if (text && text.trim()) {
       try {
         return JSON.parse(text);
       } catch (e) {
-        // Если не JSON, возвращаем null
         return null;
       }
     }
@@ -279,7 +258,6 @@ class BookingService {
     }
 
     const data = await response.json();
-    // Возвращаем полный Page объект, ProfilePage сам извлечет content
     return data;
   }
 
@@ -289,7 +267,6 @@ class BookingService {
       throw new Error('User must be authenticated');
     }
 
-    // ВАЖНО: В бэкенде есть опечатка: /cancel-booking{id} вместо /cancel-booking/{id}
     const response = await fetch(`${API_URL}/book/cancel-booking/${bookingId}`, {
       method: 'PATCH',
       headers: {
@@ -322,14 +299,11 @@ class BookingService {
       throw new Error(errorMessage);
     }
 
-    // Бэкенд возвращает пустой ответ (ResponseEntity.ok().build())
-    // Проверяем, есть ли контент перед парсингом JSON
     const text = await response.text();
     if (text && text.trim()) {
       try {
         return JSON.parse(text);
       } catch (e) {
-        // Если не JSON, возвращаем true (успешная отмена)
         return true;
       }
     }

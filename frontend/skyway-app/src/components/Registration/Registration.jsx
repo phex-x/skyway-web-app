@@ -38,20 +38,17 @@ const Registration = () => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
   const currentDay = new Date().getDate();
-  
-  // Получаем доступные дни в зависимости от выбранного месяца и года
+
   const getAvailableDays = () => {
     const maxDay = 31;
     let days = Array.from({ length: maxDay }, (_, i) => i + 1);
-    
-    // Если выбран текущий год и текущий месяц, ограничиваем дни
+
     if (formData.birthYear && parseInt(formData.birthYear) === currentYear) {
       if (formData.birthMonth && parseInt(formData.birthMonth) === currentMonth) {
         days = days.filter(day => day <= currentDay);
       }
     }
-    
-    // Учитываем количество дней в месяце
+
     if (formData.birthMonth) {
       const month = parseInt(formData.birthMonth);
       const daysInMonth = new Date(
@@ -64,20 +61,17 @@ const Registration = () => {
     
     return days;
   };
-  
-  // Получаем доступные месяцы в зависимости от выбранного года
+
   const getAvailableMonths = () => {
     let availableMonths = months.map((month, index) => ({ name: month, value: index + 1 }));
-    
-    // Если выбран текущий год, ограничиваем месяцы
+
     if (formData.birthYear && parseInt(formData.birthYear) === currentYear) {
       availableMonths = availableMonths.filter(month => month.value <= currentMonth);
     }
     
     return availableMonths;
   };
-  
-  // Генерируем годы (максимум - текущий год)
+
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
   
   const days = getAvailableDays();

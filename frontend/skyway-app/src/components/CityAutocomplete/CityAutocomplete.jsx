@@ -12,13 +12,11 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
 
   useEffect(() => {
     if (value !== inputValue) {
-      // Если value - это название города, находим город и показываем полный формат
       const city = cities.find(c => c.city === value);
       if (city) {
         setInputValue(formatCityDisplay(city));
         setIsValid(true);
       } else {
-        // Если value - это полный формат, оставляем как есть
         const cityFromFull = getCityByName(value);
         if (cityFromFull) {
           setInputValue(formatCityDisplay(cityFromFull));
@@ -64,21 +62,16 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
     const filtered = searchCities(newValue);
     setSuggestions(filtered);
     setShowSuggestions(filtered.length > 0);
-    
-    // Проверяем, является ли введенное значение полным форматом или просто названием города
+
     const cityFromFull = getCityByName(newValue);
     const cityFromName = cities.find(c => c.city === newValue);
     const city = cityFromFull || cityFromName;
     
     setIsValid(city !== null);
-    
-    // Если найден город, передаем только его название
+
     if (city) {
-      // Показываем полный формат в инпуте для удобства пользователя
-      // Но передаем только название города для отправки на бэкенд
       onChange(city.city);
     } else {
-      // Если город не найден, передаем как есть (для валидации)
       onChange(newValue);
     }
   };
@@ -88,7 +81,6 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
     setInputValue(formatted);
     setShowSuggestions(false);
     setIsValid(true);
-    // Передаем только название города, а не полный формат
     onChange(city.city);
   };
 
@@ -101,8 +93,6 @@ const CityAutocomplete = ({ value, onChange, placeholder, label, required = fals
   };
 
   const handleInputBlur = (e) => {
-    // Не закрываем сразу, чтобы клик по предложению успел сработать
-    // Проверяем, что клик не был по выпадающему списку
     if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget)) {
       setTimeout(() => {
         setShowSuggestions(false);

@@ -1,4 +1,3 @@
-// src/pages/BookingPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext/AuthContext';
@@ -31,8 +30,7 @@ const BookingPage = () => {
           setLoading(true);
           const savedPassengers = await passengerService.getAllPassengers();
           setExistingPassengers(savedPassengers);
-          
-          // Если есть сохраненные пассажиры, добавляем их в список
+
           if (savedPassengers && savedPassengers.length > 0) {
             const formattedPassengers = savedPassengers.map(p => ({
               id: p.id,
@@ -47,7 +45,6 @@ const BookingPage = () => {
             setPassengers(formattedPassengers);
             setSelectedPassengers(formattedPassengers.map(p => p.id));
           } else {
-            // Если нет сохраненных пассажиров, создаем пустую форму
             setPassengers([{
               id: 'new-passenger-1',
               firstName: '',
@@ -62,7 +59,6 @@ const BookingPage = () => {
           }
         } catch (error) {
           console.error('Error loading passengers:', error);
-          // Если ошибка, создаем пустую форму
           setPassengers([{
             id: 'new-passenger-1',
             firstName: '',
@@ -78,7 +74,6 @@ const BookingPage = () => {
           setLoading(false);
         }
       } else if (bookingData && !isAuthenticated) {
-        // Если пользователь не авторизован, создаем пустую форму
         setPassengers([{
           id: 'new-passenger-1',
           firstName: '',
@@ -128,10 +123,8 @@ const BookingPage = () => {
   const handleRemovePassenger = (id) => {
     const passenger = passengers.find(p => p.id === id);
     if (passenger?.isExisting) {
-      // Для существующих пассажиров просто убираем из выбранных
       setSelectedPassengers(selectedPassengers.filter(p => p !== id));
     } else {
-      // Для новых пассажиров удаляем полностью
       setPassengers(passengers.filter(p => p.id !== id));
       setSelectedPassengers(selectedPassengers.filter(p => p !== id));
     }
@@ -152,8 +145,7 @@ const BookingPage = () => {
     }
 
     const selectedPassengersData = passengers.filter(p => selectedPassengers.includes(p.id));
-    
-    // Валидация данных пассажиров
+
     for (const passenger of selectedPassengersData) {
       if (!passenger.firstName || !passenger.lastName || !passenger.passportNumber || 
           !passenger.citizenship || !passenger.birthday || !passenger.gender) {
@@ -164,16 +156,13 @@ const BookingPage = () => {
 
     try {
       setLoading(true);
-      
-      // Сначала создаем/получаем пассажиров
+
       const passengersForBooking = [];
       
       for (const passenger of selectedPassengersData) {
         if (passenger.isExisting) {
-          // Используем существующего пассажира - отправляем полный объект Passenger
           const existingPassenger = existingPassengers.find(p => p.id === passenger.id);
           if (existingPassenger) {
-            // Форматируем дату для отправки
             const dateOfBirth = existingPassenger.dateOfBirth 
               ? new Date(existingPassenger.dateOfBirth).toISOString()
               : null;
@@ -189,7 +178,6 @@ const BookingPage = () => {
             });
           }
         } else {
-          // Создаем нового пассажира через API
           const birthdayDate = new Date(passenger.birthday);
           const passengerData = {
             firstName: passenger.firstName,
@@ -201,8 +189,7 @@ const BookingPage = () => {
           };
           
           const createdPassenger = await passengerService.createPassenger(passengerData);
-          
-          // Форматируем дату для отправки
+
           const dateOfBirth = createdPassenger.dateOfBirth 
             ? new Date(createdPassenger.dateOfBirth).toISOString()
             : null;
@@ -219,13 +206,11 @@ const BookingPage = () => {
         }
       }
 
-      // Создаем бронирование для рейса туда
       const outboundFlight = bookingData.outboundFlight;
       if (outboundFlight) {
         await bookingService.createBooking(outboundFlight, passengersForBooking);
       }
 
-      // Если есть обратный рейс, создаем второе бронирование
       if (bookingData.returnFlight) {
         await bookingService.createBooking(bookingData.returnFlight, passengersForBooking);
       }
