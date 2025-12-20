@@ -89,9 +89,9 @@ const AboutAuthorPage = () => {
                     <div style={styles.row}>
                         <span style={styles.label}>Стек</span>
                         <ul style={{ marginTop: '10px', paddingLeft: '20px' }}>
-                            <li>Java 17, SpringBoot 4.0.0, Spring Security, Spring Data JPA, PostgreSQL, JWT, liquidbase</li>
+                            <li>Java 17, SpringBoot 4.0.0, Spring Security, Spring Data JPA, PostgreSQL, JWT</li>
                             <li>React, JavaScript, ReactRouterDom, HTML, CSS, fetch</li>
-                            <li>Docker, git</li>
+                            <li>Git</li>
                         </ul>
                     </div>
                     <div style={styles.row}>

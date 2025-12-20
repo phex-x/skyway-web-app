@@ -4,9 +4,11 @@
     display: flex;
     gap: 15px;
     align-items: flex-end;
+    min-height: 150px;
 }
 
 .inputGroup {
+    margin-bottom: 50px;
     flex: 1;
 }
 
@@ -38,4 +40,5 @@
     font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
+    margin-bottom: 50px;
 }
