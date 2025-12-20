@@ -1,0 +1,84 @@
+.page {
+    min-height: 100vh;
+    background-color: #ececec;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    background-color: #004758;
+    color: #fff;
+    padding: 20px 30px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.userInfo {
+    font-size: 14px;
+}
+
+.backButton {
+    padding: 10px 20px;
+    background-color: #b79c72;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.content {
+    padding: 30px;
+}
+
+.tabsContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabButton {
+    padding: 10px 16px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+.tabButtonActive {
+    border-bottom-color: #004758;
+    color: #004758;
+}
+
+.statsError {
+    background-color: #ffebee;
+    color: #d32f2f;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.statsLoading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

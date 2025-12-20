@@ -8,6 +8,7 @@ import com.skyway.error.InvalidCredentialException;
 import com.skyway.mapper.BookingMapper;
 import com.skyway.repository.BookingRepository;
 import com.skyway.repository.FlightRepository;
+import com.skyway.repository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,9 @@ public class BookingService {
 
     @Autowired
     private BookingMapper bookingMapper;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
 
     private String generateBookingReference() {
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -61,7 +65,7 @@ public class BookingService {
         if (booking == null) {
             throw new BookingDoesntExistsException("Booking not found");
         }
-        if (!booking.getUser().getFirstName().equals(name)) {
+        if (!booking.getUser().getLastName().equals(name)) {
             throw new InvalidCredentialException("Invalid username or booking reference");
         }
         return bookingMapper.toBookingResponse(booking);

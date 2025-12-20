@@ -1,4 +1,3 @@
-// src/services/PassengerService.js
 import authService from './AuthService';
 
 const API_URL = 'http://localhost:8080';

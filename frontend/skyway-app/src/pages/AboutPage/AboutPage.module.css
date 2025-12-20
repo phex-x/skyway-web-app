@@ -1,0 +1,60 @@
+.page {
+    min-height: 100vh;
+    background-color: #ececec;
+    font-family: Arial, sans-serif;
+    padding: 40px 20px
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto
+}
+
+.header {
+    margin-bottom: 40px;
+    text-align: center
+}
+
+.title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #004758;
+    margin-bottom: 10px
+}
+
+.subtitle {
+    font-size: 18px;
+    color: #666
+}
+
+.backButton {
+    padding: 10px 20px;
+    background-color: #004758;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1)
+}
+
+.row {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6
+}
+
+.label {
+    font-weight: bold;
+    color: #004758
+}

@@ -1,4 +1,3 @@
-// src/services/AdminService.js
 import authService from './AuthService';
 
 const API_URL = 'http://localhost:8080';
@@ -42,7 +41,6 @@ class AdminService {
 
     const data = await response.json();
 
-    // Нормализуем ответ: поддерживаем как Page, так и простой массив (на случай изменений бэкенда)
     if (Array.isArray(data)) {
       return {
         content: data,

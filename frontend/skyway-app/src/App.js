@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import HomePage from './pages/HomePage';
-import RegistrationPage from './pages/RegistrationPage';
-import LoginPage from './pages/LoginPage';
-import FlightSearchPage from './pages/FlightSearchPage';
-import BookingPage from './pages/BookingPage';
-import ManageBookingPage from './pages/ManageBookingPage';
-import ProfilePage from './pages/ProfilePage';
-import BookingSearchPage from './pages/BookingSearchPage';
-import StaffPanelPage from './pages/StaffPanelPage';
-import AdminPanelPage from './pages/AdminPanelPage';
-import DestinationsPage from './pages/DestinationsPage';
-import AboutPage from './pages/AboutPage';
+import { AuthProvider } from './context/AuthContext/AuthContext';
+import HomePage from './pages/HomePage/HomePage';
+import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
+import LoginPage from './pages/LoginPage/LoginPage';
+import FlightSearchPage from './pages/FlightSearchPage/FlightSearchPage';
+import BookingPage from './pages/BookingPage/BookingPage';
+import ManageBookingPage from './pages/ManageBookingPage/ManageBookingPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import BookingSearchPage from './pages/BookingSearchPage/BookingSearchPage';
+import StaffPanelPage from './pages/StaffPanel/StaffPanelPage';
+import AdminPanelPage from './pages/AdminPanelPage/AdminPanelPage';
+import DestinationsPage from './pages/DestinationPage/DestinationsPage';
+import AboutPage from './pages/AboutPage/AboutPage';
 
 const AppContent = () => {
   return (

@@ -1,0 +1,245 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import CityAutocomplete from '../CityAutocomplete/CityAutocomplete';
+import { cities } from '../../utils/cities';
+import styles from './FlightSearchTab.module.css';
+
+const FlightSearchTab = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Загружаем сохраненные данные из localStorage или из location.state
+  const loadSavedData = () => {
+    const saved = localStorage.getItem('flightSearchData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const savedData = loadSavedData();
+  const stateData = location.state;
+
+  const [departure, setDeparture] = useState(() => {
+    if (stateData?.departure) return stateData.departure;
+    if (savedData?.departure) return savedData.departure;
+    return '';
+  });
+  const [arrival, setArrival] = useState(() => {
+    if (stateData?.arrival) return stateData.arrival;
+    if (savedData?.arrival) return savedData.arrival;
+    return '';
+  });
+  const [tripType, setTripType] = useState(() => {
+    if (stateData?.tripType) return stateData.tripType;
+    if (savedData?.tripType) return savedData.tripType;
+    return 'one-way';
+  });
+  const [departureDate, setDepartureDate] = useState(() => {
+    if (stateData?.departureDate) return stateData.departureDate;
+    if (savedData?.departureDate) return savedData.departureDate;
+    return '';
+  });
+  const [returnDate, setReturnDate] = useState(() => {
+    if (stateData?.returnDate) return stateData.returnDate;
+    if (savedData?.returnDate) return savedData.returnDate;
+    return '';
+  });
+  const [seatClass, setSeatClass] = useState(() => {
+    if (stateData?.seatClass) return stateData.seatClass;
+    if (savedData?.seatClass) return savedData.seatClass;
+    return 'ECONOMY';
+  });
+  const [passengerCount, setPassengerCount] = useState(() => {
+    if (stateData?.passengerCount) return stateData.passengerCount;
+    if (savedData?.passengerCount) return savedData.passengerCount;
+    return 1;
+  });
+
+  useEffect(() => {
+    const searchData = {
+      departure,
+      arrival,
+      tripType,
+      departureDate,
+      returnDate,
+      seatClass,
+      passengerCount
+    };
+    localStorage.setItem('flightSearchData', JSON.stringify(searchData));
+  }, [departure, arrival, tripType, departureDate, returnDate, seatClass, passengerCount]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Валидация городов
+    if (!departure || !arrival || !departureDate) {
+      alert('Заполните все обязательные поля');
+      return;
+    }
+
+    const departureCity = cities.find(c => c.city === departure);
+    const arrivalCity = cities.find(c => c.city === arrival);
+    
+    if (!departureCity) {
+      alert('Выберите город вылета из списка');
+      return;
+    }
+    
+    if (!arrivalCity) {
+      alert('Выберите город прибытия из списка');
+      return;
+    }
+    
+    if (departureCity.city === arrivalCity.city) {
+      alert('Город вылета и город прибытия не могут совпадать');
+      return;
+    }
+    
+    if (tripType === 'round-trip' && !returnDate) {
+      alert('Укажите дату возврата');
+      return;
+    }
+
+    const searchData = {
+      departure: departure,
+      arrival: arrival,
+      tripType,
+      departureDate,
+      returnDate: tripType === 'round-trip' ? returnDate : null,
+      seatClass,
+      passengerCount
+    };
+    
+    localStorage.setItem('flightSearchData', JSON.stringify(searchData));
+    
+    // Отправляем только название города
+    navigate('/flights', {
+      state: searchData
+    });
+  };
+
+  const today = new Date().toISOString().split('T')[0];
+
+  const getMinReturnDate = () => {
+    if (departureDate) {
+      return departureDate;
+    }
+    return today;
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.formContainer}>
+        <div className={styles.radioContainer}>
+            <div className={styles.tripTypeSelector}>
+                <button
+                    type="button"
+                    className={`${styles.tripTypeButton} ${tripType === 'one-way' ? styles.active : ''}`}
+                    onClick={() => setTripType('one-way')}
+                >
+                    <input
+                        type="radio"
+                        name="tripType"
+                        value="one-way"
+                        checked={tripType === 'one-way'}
+                        onChange={() => {}}
+                        className={styles.radioHidden}
+                    />
+                    <span>В одну сторону</span>
+                </button>
+
+                <button
+                    type="button"
+                    className={`${styles.tripTypeButton} ${tripType === 'round-trip' ? styles.active : ''}`}
+                    onClick={() => setTripType('round-trip')}
+                >
+                    <input
+                        type="radio"
+                        name="tripType"
+                        value="round-trip"
+                        checked={tripType === 'round-trip'}
+                        onChange={() => {}}
+                        className={styles.radioHidden}
+                    />
+                    <span>Туда-обратно</span>
+                </button>
+            </div>
+        </div>
+      <div className={styles.inputGroup}>
+        <CityAutocomplete
+          value={departure}
+          onChange={setDeparture}
+          placeholder="Начните вводить город вылета"
+          label="Город вылета"
+          required={true}
+        />
+      </div>
+      <div className={styles.inputGroup}>
+        <CityAutocomplete
+          value={arrival}
+          onChange={setArrival}
+          placeholder="Начните вводить город прибытия"
+          label="Город прибытия"
+          required={true}
+        />
+      </div>
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Дата вылета</label>
+        <input
+          type="date"
+          value={departureDate}
+          onChange={(e) => setDepartureDate(e.target.value)}
+          className={styles.input}
+          min={today}
+          required
+        />
+      </div>
+      {tripType === 'round-trip' && (
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Дата возврата</label>
+          <input
+            type="date"
+            value={returnDate}
+            onChange={(e) => setReturnDate(e.target.value)}
+            className={styles.input}
+            min={getMinReturnDate()}
+            required
+          />
+        </div>
+      )}
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Класс места</label>
+        <select
+          value={seatClass}
+          onChange={(e) => setSeatClass(e.target.value)}
+          className={styles.select}
+        >
+          <option value="ECONOMY">Эконом</option>
+          <option value="BUSINESS">Бизнес</option>
+        </select>
+      </div>
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>Количество пассажиров</label>
+        <input
+          type="number"
+          min="1"
+          max="9"
+          value={passengerCount}
+          onChange={(e) => setPassengerCount(parseInt(e.target.value) || 1)}
+          className={styles.input}
+          required
+        />
+      </div>
+      <button type="submit" className={styles.searchButton}>
+        Поиск
+      </button>
+    </form>
+  );
+};
+
+export default FlightSearchTab;
+
